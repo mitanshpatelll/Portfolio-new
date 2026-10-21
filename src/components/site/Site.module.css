@@ -135,5 +135,7 @@
 @media (max-width: 480px) {
   .header { padding: 0 16px; }
   .nav { gap: 14px; }
+  /* On inner pages the name link would push "Contact" off screen; every item leads home anyway. */
+  .nav .home { display: none; }
   .footer { padding: 20px 16px 28px; }
 }

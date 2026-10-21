@@ -23,24 +23,72 @@ type Layout = {
 };
 type Point = { x: number; y: number };
 
+/** Evenly spaced points along a rounded rectangle, clockwise from the middle of its top edge. */
+function aroundRoundedRect(count: number, halfW: number, top: number, bottom: number, radius: number): Point[] {
+  const straightX = halfW - radius;
+  const arc = (Math.PI / 2) * radius;
+  const segments: { length: number; at: (d: number) => Point }[] = [
+    { length: straightX, at: (d) => ({ x: d, y: -top }) },
+    { length: arc, at: (d) => ({ x: straightX + Math.sin(d / radius) * radius, y: -top + radius - Math.cos(d / radius) * radius }) },
+    { length: top + bottom - 2 * radius, at: (d) => ({ x: halfW, y: -top + radius + d }) },
+    { length: arc, at: (d) => ({ x: straightX + Math.cos(d / radius) * radius, y: bottom - radius + Math.sin(d / radius) * radius }) },
+    { length: 2 * straightX, at: (d) => ({ x: straightX - d, y: bottom }) },
+    { length: arc, at: (d) => ({ x: -straightX - Math.sin(d / radius) * radius, y: bottom - radius + Math.cos(d / radius) * radius }) },
+    { length: top + bottom - 2 * radius, at: (d) => ({ x: -halfW, y: bottom - radius - d }) },
+    { length: arc, at: (d) => ({ x: -straightX - Math.cos(d / radius) * radius, y: -top + radius - Math.sin(d / radius) * radius }) },
+    { length: straightX, at: (d) => ({ x: -straightX + d, y: -top }) },
+  ];
+  const total = segments.reduce((sum, segment) => sum + segment.length, 0);
+  return Array.from({ length: count }, (_, index) => {
+    let distance = (index / count) * total;
+    for (const segment of segments) {
+      if (distance <= segment.length) return segment.at(distance);
+      distance -= segment.length;
+    }
+    return { x: 0, y: -top };
+  });
+}
+
 /**
- * Phone size and where each object floats: a loose ring around the (smaller, merge-time) phone,
- * at slightly uneven distances so it reads as natural rather than a grid, kept clear of the
- * phone, the caption at the top and the screen edges.
+ * Phone size and where each object floats around the (smaller, merge-time) phone.
+ * - Wide screens: a loose ring, at slightly uneven distances so it reads as natural rather than
+ *   a grid, kept clear of the phone, the caption at the top and the screen edges.
+ * - Phone screens have no room for a ring around a tall phone, so the objects sit evenly spaced
+ *   and mirrored on a rounded rectangle hugging it. The phone is sized so that a chip and its name
+ *   fit above, below and beside it, between the caption and the Skip button.
  */
 function measure(): Layout {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const narrow = vw < 640;
   const { w, h } = phoneSize(vw, vh);
-  const mergeScale = Math.min(1, (vh * (narrow ? 0.5 : 0.6)) / h);
+  const base = { vw, vh, w, h, time: clockTime() };
+
+  if (narrow) {
+    const chip = 44;
+    const name = 18; // a name's line under its chip
+    const halfName = 34; // half the widest name ("Alarm clock")
+    const gap = 10;
+    const caption = vh * 0.04 + 36; // the caption's band at the top
+    const skip = 20 + 34 + 14; // the Skip button's band at the bottom
+    const maxHalfH = Math.min(vh / 2 - caption, vh / 2 - skip) - (gap + chip + name);
+    const maxHalfW = vw / 2 - 10 - 2 * halfName - 6;
+    const mergeScale = Math.min(1, (2 * maxHalfH) / h, (2 * maxHalfW) / w);
+    const halfW = (w * mergeScale) / 2;
+    const halfH = (h * mergeScale) / 2;
+    // Names sit under their chips, so the top edge of the path is a name's height further out.
+    const objects = aroundRoundedRect(objectCount, halfW + 6 + halfName, halfH + gap + name + chip / 2, halfH + gap + chip / 2, 32);
+    return { ...base, mergeScale, objects };
+  }
+
+  const mergeScale = Math.min(1, (vh * 0.6) / h);
   const mergeW = w * mergeScale;
   const mergeH = h * mergeScale;
-  const chip = narrow ? 44 : 64;
-  const maxX = vw / 2 - chip / 2 - (narrow ? 14 : 40);
-  const maxY = vh / 2 - chip / 2 - (narrow ? 60 : 70);
-  const rx = Math.min(maxX, mergeW / 2 + (narrow ? 70 : 190));
-  const ry = Math.min(maxY, mergeH / 2 + (narrow ? 80 : 80));
+  const chip = 64;
+  const maxX = vw / 2 - chip / 2 - 40;
+  const maxY = vh / 2 - chip / 2 - 70;
+  const rx = Math.min(maxX, mergeW / 2 + 190);
+  const ry = Math.min(maxY, mergeH / 2 + 80);
   const objects = Array.from({ length: objectCount }, (_, index) => {
     const angle = -Math.PI / 2 + (index / objectCount) * Math.PI * 2 + (index % 2 ? 0.07 : -0.05);
     const wobble = 1 + 0.05 * Math.sin(index * 2.4 + 1);
@@ -53,7 +101,7 @@ function measure(): Layout {
     }
     return { x: Math.max(-maxX, Math.min(maxX, x)), y: Math.max(-maxY, Math.min(maxY, y)) };
   });
-  return { vw, vh, w, h, mergeScale, objects, time: clockTime() };
+  return { ...base, mergeScale, objects };
 }
 
 /**

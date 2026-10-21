@@ -170,7 +170,8 @@
 .appLabel {
   max-width: 100%;
   overflow: hidden;
-  font-size: 9px;
+  /* Scales with the phone, as on a real home screen, so names like "Calculator" fit. */
+  font-size: clamp(7px, calc(var(--w) * 0.036), 9px);
   line-height: 1.2;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -528,7 +529,7 @@
 
 @media (max-width: 640px) {
   .caption { font-size: 12px; }
-  .objectLabel { font-size: 9px; }
+  .objectLabel { font-size: 10px; }
   .skip {
     right: 50%;
     bottom: 20px;

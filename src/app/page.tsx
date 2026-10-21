@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Profile } from '@/components/home/Profile';
-import { About, Activity, Apps, Contact, Experience, Skills, Writing } from '@/components/home/Sections';
+import { About, Activity, Apps, Contact, Experience, Links, Skills, Writing } from '@/components/home/Sections';
 import { IntroLoader } from '@/components/intro/IntroLoader';
 import { Shell } from '@/components/site/Shell';
 import { links, person, site, skills } from '@/content/profile';
@@ -85,12 +85,13 @@ export default function Home() {
       <IntroLoader />
       <Shell onHome>
         <Profile />
+        <Links />
         <Experience />
+        <Writing />
         <Apps />
         <About />
-        <Skills />
-        <Writing />
         <Activity />
+        <Skills />
         <Contact />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData()) }} />
       </Shell>

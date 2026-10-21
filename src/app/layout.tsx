@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
-import { Geist_Mono, Manrope } from 'next/font/google';
+import { Geist_Mono, Manrope, Newsreader } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { AnimatorScaleDialog } from '@/components/device/AnimatorScaleDialog';
 import { DeviceProvider } from '@/components/device/DeviceProvider';
@@ -11,6 +11,9 @@ import './globals.css';
 // Manrope is also Billify's font, so the portfolio and the app read the same.
 const sans = Manrope({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
+// Newsreader for descriptions and sub text (the bio, notes, app descriptions): a serif made for
+// reading on screens, as a calm contrast to Manrope. Its optical sizes keep small text sturdy.
+const serif = Newsreader({ subsets: ['latin'], style: ['normal', 'italic'], axes: ['opsz'], variable: '--font-serif', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -67,7 +70,7 @@ const boot = `(function(){var d=document.documentElement;d.classList.add('js');v
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${sans.variable} ${mono.variable} ${serif.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>

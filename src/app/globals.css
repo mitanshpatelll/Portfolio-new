@@ -188,6 +188,7 @@ a { color: inherit; }
 .skip-link:focus { top: 12px; }
 
 .mono { font-family: var(--font-mono), ui-monospace, monospace; }
+.serif { font-family: var(--font-serif), Georgia, serif; }
 
 /* Developer mode → Show layout bounds */
 [data-bounds] * {

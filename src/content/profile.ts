@@ -46,12 +46,6 @@ export const person = {
   location: 'India',
   bio: "I build mobile apps with React Native that stay fast and keep working when the internet doesn't. Right now I'm building Billify, a billing app for kirana stores.",
   status: 'Open to React Native roles',
-  // Shown as a phone-style notification under the bio. Update it as the work moves on.
-  now: {
-    app: 'billify',
-    title: 'Building Billify',
-    text: 'Shop app and customer side are done. Next: first release to 2–3 shops.',
-  },
   // Square photo in public/ (800×800). Set to null to fall back to the initial.
   photo: '/mitansh-patel.jpg' as string | null,
 };

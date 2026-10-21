@@ -1,9 +1,10 @@
 /* =========================================================
-   Sections: a title, then the content in rounded pastel cards
+   Sections: a title, then one card holding the section. Inside the
+   cards things stay light: plain text lists, thin dividers.
    ========================================================= */
 .section {
   position: relative;
-  padding: 32px 20px 4px;
+  padding: 36px 20px 0;
 }
 
 .titleRow {
@@ -11,19 +12,20 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  margin: 0 4px 14px;
+  margin: 0 4px 12px;
 }
 .title {
   margin: 0;
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
 }
 .note {
-  margin: -6px 4px 16px;
+  margin: -6px 4px 14px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14.5px;
+  font-style: italic;
 }
 
 .more {
@@ -40,12 +42,12 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  height: 20px;
-  padding: 0 6px;
+  height: 18px;
+  padding: 0 7px;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 999px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -54,8 +56,8 @@
    Profile
    ========================================================= */
 .profile {
-  margin: 20px 20px 0;
-  padding: 28px 24px 24px;
+  margin: 24px 20px 0;
+  padding: 24px;
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: inset 0 0 0 1px var(--line);
@@ -63,9 +65,9 @@
 .profileTop {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
-/* Shaped like an app icon, with a notification badge */
+/* Shaped like an app icon, with a small "open to work" badge */
 .avatar {
   position: relative;
   display: block;
@@ -73,8 +75,8 @@
 }
 .photo {
   display: block;
-  width: 88px;
-  height: 88px;
+  width: 64px;
+  height: 64px;
   flex: none;
   border-radius: 22.5%;
   object-fit: cover;
@@ -85,23 +87,24 @@
   place-items: center;
   background: var(--text);
   color: var(--bg);
-  font-size: 34px;
+  font-size: 24px;
   font-weight: 600;
 }
 .avatarBadge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 18px;
-  height: 18px;
+  top: -3px;
+  right: -3px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 0 3px var(--surface);
+  box-shadow: 0 0 0 2.5px var(--surface);
 }
 :global(.js) .avatarBadge {
   animation: badge-pop calc(500ms * var(--anim)) cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
   animation-delay: calc(650ms * var(--anim));
 }
+:global(html[data-intro]) .avatarBadge { animation: none; }
 
 @keyframes badge-pop {
   from { transform: scale(0); }
@@ -116,7 +119,7 @@
 }
 .name {
   margin: 0;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.025em;
@@ -126,93 +129,20 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 2px 8px;
-  margin: 4px 0 0;
+  margin: 3px 0 0;
   color: var(--muted);
   font-size: 14px;
 }
 .metaLine a { text-decoration: none; }
 .metaLine a:hover { color: var(--text); }
-.socials {
-  display: flex;
-  gap: 4px;
-  margin: 8px 0 0 -6px;
-  padding: 0;
-  list-style: none;
-}
-.socials a {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  color: var(--muted);
-  transition: color 0.15s ease, background-color 0.15s ease, transform 0.12s ease;
-}
-.socials a:hover { color: var(--text); background: var(--hover); }
-.socials svg { width: 16px; height: 16px; }
+/* Descriptions are in Newsreader (see layout.tsx), set a little larger because serifs run small. */
 .bio {
-  max-width: 62ch;
-  margin: 22px 0 0;
-  font-size: 15px;
-}
-/* "Now building", as a phone notification that drops in */
-.notification {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  max-width: 440px;
+  max-width: 60ch;
   margin: 20px 0 0;
-  padding: 12px 14px;
-  border-radius: 20px;
-  background: var(--hover);
-  box-shadow: inset 0 0 0 1px var(--line);
-  text-decoration: none;
-  transition: transform calc(200ms * var(--anim)) var(--ease-emphasized);
-}
-.notification:hover { transform: translateY(-1px); }
-:global(.js) .notification {
-  animation: notify calc(900ms * var(--anim)) var(--ease-out) backwards;
-  animation-delay: calc(800ms * var(--anim));
-}
-
-:global(html[data-intro]) .notification,
-:global(html[data-intro]) .avatarBadge { animation: none; }
-
-@keyframes notify {
-  from { opacity: 0; filter: blur(4px); transform: translateY(-16px) scale(0.97); }
-  to { opacity: 1; filter: none; transform: none; }
-}
-
-.notificationIcon {
-  width: 38px;
-  height: 38px;
-  flex: none;
-  border-radius: 9px;
-}
-.notificationBody {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-}
-.notificationHead {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  color: var(--muted);
-  font-size: 12px;
-}
-.notificationHead .mono { font-size: 11px; }
-.notificationTitle {
-  margin-top: 1px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.35;
-}
-.notificationText {
-  color: var(--muted);
-  font-size: 13.5px;
-  line-height: 1.45;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 16.5px;
+  line-height: 1.55;
+  text-wrap: pretty; /* no single word left alone on the last line */
 }
 
 .status {
@@ -224,8 +154,8 @@
   font-size: 12px;
 }
 .dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--accent);
   animation: pulse calc(2400ms * var(--anim)) ease-out infinite;
@@ -233,7 +163,7 @@
 
 @keyframes pulse {
   0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 50%, transparent); }
-  70%, 100% { box-shadow: 0 0 0 7px transparent; }
+  70%, 100% { box-shadow: 0 0 0 6px transparent; }
 }
 
 /* =========================================================
@@ -242,24 +172,25 @@
 .apps {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 28px;
 }
 .app {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 20px;
+  gap: 10px;
+  padding: 18px 20px;
 }
 .appHead {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 .appIconLink { flex: none; }
 .appIcon {
-  width: 56px;
-  height: 56px;
-  border-radius: 13px;
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   box-shadow: 0 0 0 1px var(--line);
 }
 .appTitle { min-width: 0; }
@@ -268,7 +199,7 @@
   align-items: center;
   gap: 8px;
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
@@ -276,10 +207,10 @@
 .appName a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .platforms {
   display: flex;
-  gap: 12px;
-  margin: 2px 0 0;
+  gap: 10px;
+  margin: 1px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12.5px;
 }
 .platforms span {
   display: inline-flex;
@@ -305,28 +236,28 @@
 .appText {
   max-width: 62ch;
   margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 16px;
+  line-height: 1.5;
 }
+/* Facts as one quiet line, separated by dots (the dot starting a line is clipped, as in TagList) */
+.factsClip { overflow: hidden; }
 .facts {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 18px;
-  margin: 0;
+  margin: 0 0 0 -17px;
   padding: 0;
   color: var(--muted);
   font-size: 12px;
   list-style: none;
 }
-.facts li {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
+.facts li { white-space: nowrap; }
 .facts li::before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
+  content: "·";
+  display: inline-block;
+  width: 17px;
+  color: var(--faint);
+  text-align: center;
 }
 .shots {
   display: flex;
@@ -354,13 +285,13 @@
 .jobs {
   display: flex;
   flex-direction: column;
-  padding: 6px 18px;
+  padding: 6px 20px;
 }
-.job + .job { border-top: 1px solid color-mix(in srgb, var(--tone-fg, var(--text)) 16%, transparent); }
+.job + .job { border-top: 1px solid var(--line); }
 .jobButton {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
   padding: 12px 0;
   border: 0;
@@ -373,17 +304,16 @@
 .logo {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   flex: none;
-  border-radius: 9px;
-  background: var(--tone-chip, var(--hover));
-  color: var(--tone-fg, var(--muted));
+  border-radius: 8px;
+  background: var(--hover);
+  color: var(--muted);
   font-weight: 600;
   object-fit: cover;
-  box-shadow: 0 0 0 1px var(--line);
 }
-.logo svg { width: 18px; height: 18px; }
+.logo svg { width: 16px; height: 16px; }
 .jobMain {
   display: flex;
   flex: 1;
@@ -394,6 +324,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 15px;
   font-weight: 600;
 }
 .roleLine {
@@ -406,62 +337,73 @@
   white-space: nowrap;
 }
 .chevron {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   flex: none;
   color: var(--faint);
   transition: transform calc(250ms * var(--anim)) var(--ease-emphasized);
 }
 .jobButton[aria-expanded="true"] .chevron { transform: rotate(90deg); }
-.jobBody { padding: 2px 0 20px 50px; }
+.jobBody { padding: 0 0 16px 44px; }
 .jobSummary {
   margin: 0;
   color: var(--muted);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 16px;
+  line-height: 1.5;
 }
 .points {
-  margin: 10px 0 14px;
+  margin: 8px 0 10px;
   padding-left: 18px;
+  font-size: 14.5px;
 }
-.points li { margin: 4px 0; }
+.points li { margin: 3px 0; }
 .points li::marker { color: var(--faint); }
 
 /* =========================================================
    About, writing, skills
    ========================================================= */
 .about {
-  padding: 20px 22px;
+  padding: 18px 20px;
   color: var(--muted);
 }
+.about p { max-width: 62ch; }
 .about p { margin: 0 0 12px; }
 .about p:last-child { margin-bottom: 0; }
 .about strong {
-  color: var(--tone-fg, var(--text));
+  color: var(--text);
   font-weight: 600;
 }
 
 .posts {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  padding: 2px 20px;
 }
 .post {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 4px 24px;
-  padding: 18px 20px;
+  align-items: baseline;
+  gap: 2px 16px;
+  padding: 14px 0;
   text-decoration: none;
 }
+.post + .post { border-top: 1px solid var(--line); }
 .postTitle {
-  grid-column: 1;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 }
 .post:hover .postTitle {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+.postDate {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
 .postSummary {
-  grid-column: 1;
+  grid-column: 1 / -1;
   display: -webkit-box;
   overflow: hidden;
   color: var(--muted);
@@ -469,65 +411,44 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.postMeta {
-  grid-column: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
-  margin-top: 4px;
-}
-.postDate {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 12px;
-}
-.postDate svg { width: 13px; height: 13px; }
-.readMore {
-  grid-column: 2;
-  grid-row: 1 / span 3;
-  align-self: center;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--muted);
-  font-size: 13px;
-}
-.post:hover .readMore { color: var(--text); }
-.readMore svg { width: 14px; height: 14px; }
 
+/* Skills: one card, a row per group: a label and a plain line of names */
 .skillGroups {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 4px 20px;
 }
-.skillGroup { padding: 16px 18px 18px; }
+.skillGroup {
+  display: grid;
+  grid-template-columns: 136px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 16px;
+  padding: 11px 0;
+}
+.skillGroup + .skillGroup { border-top: 1px solid var(--line); }
 .groupLabel {
-  margin: 0 0 10px;
-  color: var(--tone-fg, var(--faint));
+  margin: 0;
+  color: var(--faint);
   font-size: 11px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+.skillGroup dd { margin: 0; }
 
 /* =========================================================
    Activity
    ========================================================= */
 .tabs {
   display: inline-flex;
-  margin: 0 0 18px;
-  padding: 3px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  gap: 18px;
+  margin: 0 0 16px;
 }
 .tab {
   position: relative;
-  height: 28px;
-  padding: 0 12px;
+  height: 26px;
+  padding: 0;
   border: 0;
-  border-radius: 7px;
   background: none;
   color: var(--muted);
   font: inherit;
@@ -536,16 +457,20 @@
   text-transform: uppercase;
   cursor: pointer;
 }
-.tab[aria-selected="true"] { color: var(--bg); }
+.tab[aria-selected="true"] { color: var(--text); }
+/* The selected tab's underline (slides between tabs) */
 .tabPill {
   position: absolute;
-  inset: 0;
-  border-radius: 7px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1.5px;
+  border-radius: 1px;
   background: var(--text);
 }
 .tabText { position: relative; }
 
-.activityCard { padding: 20px; }
+.activityCard { padding: 18px 20px; }
 .graphFigure {
   --cell: 10px;
   margin: 0;
@@ -604,7 +529,7 @@
 .legend .cell { margin: 0 1px; }
 .sourceLink {
   display: inline-block;
-  margin-top: 14px;
+  margin-top: 12px;
   color: var(--muted);
   font-size: 12px;
   text-underline-offset: 3px;
@@ -619,7 +544,7 @@
 .solvedTotal strong {
   margin-right: 6px;
   color: var(--text);
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -663,100 +588,144 @@
 .hard { background: #d1492e; }
 
 /* =========================================================
-   Contact
+   Links (under the profile) and the closing call to action
    ========================================================= */
-.contactIntro {
-  margin: -6px 4px 14px;
-  color: var(--muted);
-}
-.contactRows {
+.linksSection { padding: 12px 20px 0; }
+.linkGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
   margin: 0;
-  padding: 4px 18px;
+  padding: 0;
   list-style: none;
 }
-.contactRow {
+.linkCard {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  padding-right: 8px;
 }
-.contactRow + .contactRow { border-top: 1px solid color-mix(in srgb, var(--tone-fg, var(--text)) 16%, transparent); }
-.contactRow > a {
+.linkCard > a {
   display: flex;
   flex: 1;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
-  padding: 12px 0;
+  padding: 14px 8px 14px 16px;
   text-decoration: none;
 }
-.contactIcon {
+.linkIcon {
   display: grid;
   place-items: center;
   width: 34px;
   height: 34px;
   flex: none;
   border-radius: 10px;
-  background: var(--tone-chip, var(--hover));
-  color: var(--tone-fg, var(--text));
+  background: var(--hover);
+  color: var(--text);
 }
-.contactIcon svg { width: 16px; height: 16px; }
-.contactText {
+.linkIcon svg { width: 16px; height: 16px; }
+.linkText {
   display: flex;
   flex: 1;
   flex-direction: column;
   min-width: 0;
 }
-.contactName {
+.linkName {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
   gap: 8px;
+  font-size: 15px;
   font-weight: 600;
 }
-.contactHandle {
+.linkHandle {
   overflow: hidden;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 400;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
-.contactNote {
+.linkNote {
+  overflow: hidden;
   color: var(--muted);
   font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-.contactArrow {
+.linkArrow {
   width: 15px;
   height: 15px;
   flex: none;
   color: var(--faint);
   transition: transform calc(200ms * var(--anim)) var(--ease-emphasized), color 0.15s ease;
 }
-.contactRow > a:hover .contactArrow {
+.linkCard > a:hover .linkArrow {
   color: var(--text);
   transform: translateX(3px);
 }
 
+.cta {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px 20px;
+}
+.ctaText {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 16.5px;
+  line-height: 1.5;
+}
+.ctaButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s ease, transform 0.12s ease;
+}
+.button:hover { background: var(--hover); }
+.button svg { width: 14px; height: 14px; }
+.buttonPrimary {
+  border-color: transparent;
+  background: var(--text);
+  color: var(--bg);
+}
+.buttonPrimary:hover { background: color-mix(in srgb, var(--text) 88%, var(--bg)); }
+
 /* =========================================================
    Press feedback: a slight shrink on tap, like a native app
    ========================================================= */
-.socials a,
+.button,
 .appLinks a,
 .jobButton,
-.contactRow > a,
+.linkCard > a,
 .tab,
-.post,
-.notification {
+.post {
   -webkit-tap-highlight-color: transparent;
 }
-.socials a:active,
+.button:active,
 .appLinks a:active,
-.tab:active,
-.notification:active { transform: scale(0.96); }
+.tab:active { transform: scale(0.96); }
 .jobButton:active,
-.contactRow > a:active,
+.linkCard > a:active,
 .post:active { transform: scale(0.985); }
 .jobButton,
-.contactRow > a,
+.linkCard > a,
 .post { transition: transform calc(150ms * var(--anim)) var(--ease-emphasized); }
 .appLinks a,
 .tab { transition: transform 0.12s ease, color 0.15s ease; }
@@ -765,22 +734,58 @@
    Small screens
    ========================================================= */
 @media (max-width: 560px) {
-  .section { padding: 28px 12px 4px; }
+  .section { padding: 32px 12px 0; }
   .profile {
     margin: 12px 12px 0;
-    padding: 24px 18px 20px;
+    padding: 20px 18px;
   }
-  .skillGroups { grid-template-columns: minmax(0, 1fr); }
-  .photo { width: 72px; height: 72px; }
-  .notification { max-width: none; }
-  .initials { font-size: 28px; }
+  .app,
+  .about,
+  .activityCard { padding: 16px 18px; }
+  .jobs,
+  .posts,
+  .skillGroups { padding-right: 18px; padding-left: 18px; }
+  .linksSection { padding: 10px 12px 0; }
+  .linkGrid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .cta { padding: 18px; }
+  .photo { width: 56px; height: 56px; }
+  .initials { font-size: 22px; }
+  .name { font-size: 22px; }
+  .bio {
+    margin-top: 16px;
+    font-size: 15px;
+  }
   .appHead { flex-wrap: wrap; }
   .appLinks {
     width: 100%;
     margin-left: 0;
   }
-  .period { font-size: 11px; }
+  /* Role and platforms on separate lines, without a dot left hanging at the end of the first */
+  .sep { display: none; }
+  .metaLine { gap: 0 8px; }
+  .platformLine { flex-basis: 100%; }
+  /* The job's dates go under the role instead of squeezing into the row */
+  .jobButton {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 15px;
+    align-items: center;
+  }
+  .logo { grid-row: 1 / span 2; }
+  .jobMain { grid-column: 2; }
+  .period {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 2px;
+    font-size: 11px;
+  }
+  .chevron {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
   .jobBody { padding-left: 0; }
-  .post { grid-template-columns: minmax(0, 1fr); }
-  .readMore { display: none; }
+  .skillGroup {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .postDate { grid-column: 1; }
 }

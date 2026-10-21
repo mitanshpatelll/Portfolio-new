@@ -30,7 +30,7 @@ export function Section({
             </a>
           )}
         </div>
-        {note && <p className={`${styles.note} mono`}>{note}</p>}
+        {note && <p className={`${styles.note} serif`}>{note}</p>}
         {children}
       </Reveal>
     </section>

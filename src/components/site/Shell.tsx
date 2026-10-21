@@ -7,8 +7,8 @@ import styles from './Site.module.css';
 
 const nav = [
   { href: '#experience', label: 'Experience' },
-  { href: '#apps', label: 'Apps' },
   { href: '#writing', label: 'Writing' },
+  { href: '#apps', label: 'Apps' },
   { href: '#contact', label: 'Contact' },
 ];
 

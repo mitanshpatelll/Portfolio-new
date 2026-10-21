@@ -21,22 +21,21 @@ export function BrandIcon({ brand, size = 12 }: { brand: Brand; size?: number })
 }
 
 export function Tag({ tag }: { tag: TagData }) {
-  return (
-    <span className={styles.tag}>
-      {tag.brand && <BrandIcon brand={tag.brand} />}
-      {tag.label}
-    </span>
-  );
+  return <span className={styles.tag}>{tag.label}</span>;
 }
 
+/** Skills and stacks as a quiet line of text separated by dots, not pills. */
 export function TagList({ tags }: { tags: TagData[] }) {
+  // The wrapper clips the dot in front of whichever item starts a line, so dots only sit between items.
   return (
-    <ul className={styles.list}>
-      {tags.map((tag) => (
-        <li key={tag.label}>
-          <Tag tag={tag} />
-        </li>
-      ))}
-    </ul>
+    <div className={styles.clip}>
+      <ul className={styles.list}>
+        {tags.map((tag) => (
+          <li key={tag.label}>
+            <Tag tag={tag} />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

@@ -11,7 +11,7 @@ export function AppEntry({ app }: { app: App }) {
     <article className={`card ${styles.app}`}>
       <div className={styles.appHead}>
         <a href={caseStudy} className={styles.appIconLink} tabIndex={-1} aria-hidden="true">
-          <Image className={styles.appIcon} src={app.icon} alt="" width={56} height={56} />
+          <Image className={styles.appIcon} src={app.icon} alt="" width={44} height={44} />
         </a>
         <div className={styles.appTitle}>
           <h3 className={styles.appName}>
@@ -51,11 +51,13 @@ export function AppEntry({ app }: { app: App }) {
         </ul>
       )}
 
-      <ul className={`${styles.facts} mono`}>
-        {app.facts.map((fact) => (
-          <li key={fact}>{fact}</li>
-        ))}
-      </ul>
+      <div className={styles.factsClip}>
+        <ul className={`${styles.facts} mono`}>
+          {app.facts.map((fact) => (
+            <li key={fact}>{fact}</li>
+          ))}
+        </ul>
+      </div>
       <TagList tags={app.stack} />
     </article>
   );

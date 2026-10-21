@@ -1,34 +1,28 @@
+.clip { overflow: hidden; }
+
+/* Every item carries a dot in front; the list is shifted left by one dot's width, so the dot of
+   the first item on each line falls outside .clip and is hidden. */
 .list {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 0;
+  margin: 0 0 0 -17px;
   padding: 0;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.6;
   list-style: none;
 }
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 24px;
-  padding: 0 9px;
-  border: 1px solid var(--tag-border, var(--line));
-  border-radius: 999px;
-  background: var(--tag-bg, transparent);
-  color: var(--tag-fg, var(--muted));
-  font-size: 12px;
-  line-height: 1;
-  white-space: nowrap;
+.list li::before {
+  content: "·";
+  display: inline-block;
+  width: 17px;
+  color: var(--faint);
+  text-align: center;
 }
 
-/* Long tags ("LLM API Integration (Gemini, Cerebras, Groq)") wrap on narrow phones instead of overflowing. */
+.tag { white-space: nowrap; }
+
+/* Long names ("LLM API Integration (Gemini, Cerebras, Groq)") may wrap on narrow phones. */
 @media (max-width: 480px) {
-  .tag {
-    height: auto;
-    min-height: 24px;
-    padding: 4px 9px;
-    line-height: 1.3;
-    white-space: normal;
-  }
+  .tag { white-space: normal; }
 }

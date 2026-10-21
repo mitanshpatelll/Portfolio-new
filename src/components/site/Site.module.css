@@ -93,15 +93,30 @@
 }
 .copy svg { width: 14px; height: 14px; }
 
-/* Theme icon: the sun shows in dark mode (tap for light), the moon in light mode */
-.sun { display: none; }
-.moon { display: grid; }
-@media (prefers-color-scheme: dark) {
-  :global(:root:not([data-theme="light"])) .sun { display: grid; }
-  :global(:root:not([data-theme="light"])) .moon { display: none; }
+/* Theme icon: the sun shows in dark mode (tap for light), the moon in light mode. Both sit in
+   the same spot; the one leaving spins away and shrinks as the other spins in. */
+.sun,
+.moon {
+  display: grid;
+  grid-area: 1 / 1;
+  transition:
+    transform calc(550ms * var(--anim)) cubic-bezier(0.34, 1.4, 0.64, 1),
+    opacity calc(250ms * var(--anim)) ease;
 }
-:global(:root[data-theme="dark"]) .sun { display: grid; }
-:global(:root[data-theme="dark"]) .moon { display: none; }
+.sun {
+  opacity: 0;
+  transform: rotate(-120deg) scale(0.3);
+}
+.moon {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .sun { opacity: 1; transform: none; }
+  :global(:root:not([data-theme="light"])) .moon { opacity: 0; transform: rotate(120deg) scale(0.3); }
+}
+:global(:root[data-theme="dark"]) .sun { opacity: 1; transform: none; }
+:global(:root[data-theme="dark"]) .moon { opacity: 0; transform: rotate(120deg) scale(0.3); }
 
 .footer {
   display: flex;

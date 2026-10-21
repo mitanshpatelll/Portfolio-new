@@ -1,0 +1,130 @@
+/* Quick settings over the page while the theme switches (ThemeSwitch.tsx) */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.35);
+  opacity: 0;
+}
+
+/* Waits above the top of the screen; the script slides it down and back up. */
+.panel {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  left: 0;
+  width: min(380px, calc(100vw - 20px));
+  margin: 0 auto;
+  padding: 16px 14px 10px;
+  border-radius: 26px;
+  background: var(--surface);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    0 18px 40px -18px rgb(0 0 0 / 0.55);
+  color: var(--text);
+  transform: translateY(calc(-100% - 40px));
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 4px 12px;
+}
+.time {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.date {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 46px;
+  padding: 0 14px;
+  overflow: hidden;
+  border-radius: 23px;
+  background: var(--hover);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.tile svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.on {
+  background: var(--text);
+  color: var(--bg);
+}
+/* On exactly when the site is dark, so it flips the moment the theme does. */
+:global(:root[data-theme="dark"]) .themeTile {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.brightness {
+  position: relative;
+  display: block;
+  height: 8px;
+  margin: 14px 4px 4px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--hover);
+}
+.brightness::after {
+  content: "";
+  position: absolute;
+  inset: 0 38% 0 0;
+  border-radius: inherit;
+  background: var(--muted);
+}
+.handle {
+  display: block;
+  width: 34px;
+  height: 4px;
+  margin: 10px auto 0;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+/* The same pointing hand as the intro; its top-left corner sits at the top-left of the screen. */
+.hand {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 58px;
+  opacity: 0;
+  transform-origin: 34% 3%;
+  filter: drop-shadow(0 8px 14px rgb(0 0 0 / 0.25));
+  pointer-events: none;
+}
+.hand svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}

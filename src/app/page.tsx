@@ -64,7 +64,7 @@ function structuredData() {
         jobTitle: person.role,
         description: person.bio,
         url: `${site.url}/`,
-        image: `${site.url}${site.image.url}`,
+        image: `${site.url}${person.photo ?? site.image.url}`,
         address: { '@type': 'PostalAddress', addressCountry: 'IN' },
         knowsAbout: skills.flatMap((group) => group.items.map((item) => item.label)).slice(0, 30),
         hasOccupation: {

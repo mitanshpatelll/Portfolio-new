@@ -52,8 +52,8 @@ export const person = {
     title: 'Building Billify',
     text: 'Shop app and customer side are done. Next: first release to 2–3 shops.',
   },
-  // TODO: put a square photo in public/ (e.g. public/me.jpg) and write '/me.jpg' here.
-  photo: null as string | null,
+  // Square photo in public/ (800×800). Set to null to fall back to the initial.
+  photo: '/me.jpg' as string | null,
 };
 
 /** The opening animation on the home page (plays on every load of the home page). */

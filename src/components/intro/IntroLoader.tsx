@@ -4,17 +4,21 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
 const Intro = dynamic(() => import('./Intro').then((module) => module.Intro), { ssr: false });
+const Relaunch = dynamic(() => import('./Relaunch').then((module) => module.Relaunch), { ssr: false });
 
 /**
- * Downloads the intro's code only for page views that will play it (the boot script in
- * layout.tsx decides), so search engines, deep links and repeat tools load less JavaScript.
+ * Downloads only the animation this page view plays (the boot script in layout.tsx decides): the
+ * full intro on a first visit, the short close-and-reopen afterwards, nothing for search engines,
+ * deep links or reduced motion.
  */
 export function IntroLoader() {
-  const [play, setPlay] = useState(false);
+  const [mode, setMode] = useState<string>();
 
   useEffect(() => {
-    setPlay(document.documentElement.dataset.intro === 'playing');
+    setMode(document.documentElement.dataset.intro);
   }, []);
 
-  return play ? <Intro /> : null;
+  if (mode === 'playing') return <Intro />;
+  if (mode === 'relaunch') return <Relaunch />;
+  return null;
 }

@@ -441,6 +441,71 @@
 }
 
 /* =========================================================
+   Relaunch (later visits): the page as the open app, closed and opened again
+   ========================================================= */
+.relaunch .body,
+.relaunch .screen,
+.relaunch .app { opacity: 1; }
+.myTile {
+  overflow: hidden;
+  background: none;
+}
+/* Holds a copy of the page. It starts as the viewport and shrinks onto the phone; its height is
+   set from script when the phone needs more of the page than the viewport shows. */
+.card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+  overflow: hidden;
+  background: var(--page);
+  pointer-events: none;
+}
+/* The open app's status bar and home indicator, laid over the phone's screen (9px inside the
+   body, same corners), with the page between them. */
+.appBars {
+  position: absolute;
+  top: calc(50% - var(--h) / 2 + 9px);
+  left: calc(50% - var(--w) / 2 + 9px);
+  z-index: 2;
+  width: calc(var(--w) - 18px);
+  height: calc(var(--h) - 18px);
+  overflow: hidden;
+  border-radius: calc(var(--w) * 0.13);
+  pointer-events: none;
+  opacity: 0;
+}
+.appStatus,
+.appNav {
+  position: absolute;
+  right: 0;
+  left: 0;
+  background: var(--page);
+}
+.appStatus {
+  top: 0;
+  height: 32px;
+}
+.appNav {
+  bottom: 0;
+  height: 28px;
+}
+/* The home indicator, where the swipe up starts. */
+.indicator {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  width: calc(var(--w) * 0.34);
+  height: 4px;
+  margin-left: calc(var(--w) * -0.17);
+  border-radius: 2px;
+  background: var(--text);
+}
+
+/* =========================================================
    Skip
    ========================================================= */
 .skip {

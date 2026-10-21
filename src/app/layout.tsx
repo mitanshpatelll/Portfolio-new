@@ -57,11 +57,13 @@ export const viewport: Viewport = {
 // - marks JS as available (entrance animations are JS-only, so content stays visible without it);
 // - opens in dark unless the visitor chose light (saved choice), so the page never flashes the wrong theme;
 // - applies a saved animation speed from developer mode;
-// - decides whether this view gets the intro: every load of the home page, except deep links
-//   (#section), reduced motion, animations switched off, and search bots / link previewers /
-//   Lighthouse, which get the same page without the animation (?intro forces it). Failsafes uncover the
-//   page if the intro never appears within 8 s, and in any case after 40 s.
-const boot = `(function(){var d=document.documentElement;d.classList.add('js');var scale=1;try{var t=localStorage.getItem('theme');d.dataset.theme=(t==='light'||t==='dark')?t:'dark';var s=JSON.parse(localStorage.getItem('developer-options'));if(s&&s.unlocked&&typeof s.scale==='number'){scale=s.scale;d.style.setProperty('--anim',String(scale))}}catch(e){}try{var force=/[?&]intro(=|&|$)/.test(location.search);var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;var bot=/bot|crawler|spider|slurp|lighthouse|pagespeed|facebookexternalhit|embedly|preview/i.test(navigator.userAgent);if(location.pathname==='/'&&(force||(!location.hash&&!reduce&&!bot&&scale!==0))){d.dataset.intro='playing';setTimeout(function(){if(d.dataset.intro==='playing'&&!document.querySelector('[data-intro-overlay]'))delete d.dataset.intro},8000);setTimeout(function(){delete d.dataset.intro},40000*Math.max(1,scale||1))}}catch(e){}})()`;
+// - decides which opening this view gets on the home page: the full intro on the first visit
+//   ("playing"), then a short close-and-reopen of the app on every later load ("relaunch", which
+//   also starts the page at the top). None for deep links (#section), reduced motion, animations
+//   switched off, and search bots / link previewers / Lighthouse, which get the same page without
+//   the animation. ?intro forces the full intro. Failsafes end it if it never appears within 8 s,
+//   and in any case after 40 s; they set "done" (not remove it) so the hero never fades in twice.
+const boot = `(function(){var d=document.documentElement;d.classList.add('js');var scale=1;try{var t=localStorage.getItem('theme');d.dataset.theme=(t==='light'||t==='dark')?t:'dark';var s=JSON.parse(localStorage.getItem('developer-options'));if(s&&s.unlocked&&typeof s.scale==='number'){scale=s.scale;d.style.setProperty('--anim',String(scale))}}catch(e){}try{var force=/[?&]intro(=|&|$)/.test(location.search);var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;var bot=/bot|crawler|spider|slurp|lighthouse|pagespeed|facebookexternalhit|embedly|preview/i.test(navigator.userAgent);if(location.pathname==='/'&&(force||(!location.hash&&!reduce&&!bot&&scale!==0))){var seen=false;try{seen=localStorage.getItem('intro-seen')==='1'}catch(e){}var mode=(seen&&!force)?'relaunch':'playing';d.dataset.intro=mode;if(mode==='relaunch'&&'scrollRestoration' in history)history.scrollRestoration='manual';var end=function(){var m=d.dataset.intro;if(m==='playing'||m==='relaunch')d.dataset.intro='done'};setTimeout(function(){if(!document.querySelector('[data-intro-overlay]'))end()},8000);setTimeout(end,40000*Math.max(1,scale||1))}}catch(e){}})()`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

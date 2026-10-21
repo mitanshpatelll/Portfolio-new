@@ -3,7 +3,8 @@
 import { motion, useAnimate, useMotionValue, useTransform, type AnimationSequence } from 'motion/react';
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { intro, person } from '@/content/profile';
-import { AppIcon, FINGERTIP, HandArt, homeApps, ObjectArt, objectCount, objectNames, StoreGlyph } from './IntroArt';
+import { AppIcon, FINGERTIP, HandArt, ObjectArt, objectCount, objectNames } from './IntroArt';
+import { clockTime, PhoneScreen, phoneSize } from './Phone';
 import styles from './Intro.module.css';
 
 const easeOut = [0.2, 0, 0, 1] as const;
@@ -31,8 +32,7 @@ function measure(): Layout {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const narrow = vw < 640;
-  const h = Math.min(vh * (narrow ? 0.62 : 0.7), 600);
-  const w = (h * 9) / 19.5;
+  const { w, h } = phoneSize(vw, vh);
   const mergeScale = Math.min(1, (vh * (narrow ? 0.5 : 0.6)) / h);
   const mergeW = w * mergeScale;
   const mergeH = h * mergeScale;
@@ -53,16 +53,15 @@ function measure(): Layout {
     }
     return { x: Math.max(-maxX, Math.min(maxX, x)), y: Math.max(-maxY, Math.min(maxY, y)) };
   });
-  const now = new Date();
-  const time = `${now.getHours() % 12 || 12}:${String(now.getMinutes()).padStart(2, '0')}`;
-  return { vw, vh, w, h, mergeScale, objects, time };
+  return { vw, vh, w, h, mergeScale, objects, time: clockTime() };
 }
 
 /**
  * The opening: a rectangle appears, the things a phone replaced fly into it, it becomes a phone
  * whose home screen holds them as apps. A cursor opens the Store, searches for me, installs the
  * app, opens it, the splash screen plays its exit and the phone zooms into the site.
- * Only runs when the boot script in layout.tsx marked this page view with data-intro="playing".
+ * Only runs when the boot script in layout.tsx marked this page view with data-intro="playing",
+ * which is the first visit; later visits get the shorter Relaunch.
  */
 export function Intro() {
   const [layout, setLayout] = useState<Layout | null>(null);
@@ -75,6 +74,10 @@ export function Intro() {
 
   useEffect(() => {
     if (document.documentElement.dataset.intro !== 'playing') return;
+    // From now on this browser gets the short "close and reopen" version (see layout.tsx).
+    try {
+      localStorage.setItem('intro-seen', '1');
+    } catch {}
     setLayout(measure());
   }, []);
 
@@ -328,57 +331,7 @@ export function Intro() {
           </svg>
           <div className={styles.body} data-body />
 
-          <div className={styles.screen} data-screen>
-            <div className={styles.status}>
-              <span>{layout.time}</span>
-              <span className={styles.camera} />
-              <span className={styles.statusIcons}>
-                <svg viewBox="0 0 18 12" width="15" height="10" fill="currentColor">
-                  <rect x="0" y="8" width="3" height="4" rx="1" />
-                  <rect x="5" y="5.5" width="3" height="6.5" rx="1" />
-                  <rect x="10" y="3" width="3" height="9" rx="1" />
-                  <rect x="15" y="0" width="3" height="12" rx="1" />
-                </svg>
-                <svg viewBox="0 0 26 12" width="22" height="10" fill="none" stroke="currentColor">
-                  <rect x="0.5" y="0.5" width="22" height="11" rx="3" opacity="0.5" />
-                  <rect x="2.5" y="2.5" width="15" height="7" rx="1.5" fill="currentColor" stroke="none" />
-                </svg>
-              </span>
-            </div>
-
-            {/* Home screen: the objects, now apps */}
-            <div className={styles.home} data-home>
-              <div className={styles.grid}>
-                {homeApps.grid.map((app) => (
-                  <span key={app.label} className={styles.app} data-app-object={app.object}>
-                    <span className={styles.appTile} data-app-tile>
-                      <ObjectArt index={app.object} />
-                    </span>
-                    <span className={styles.appLabel}>{app.label}</span>
-                  </span>
-                ))}
-              </div>
-              <div className={styles.dock}>
-                {homeApps.dock.map((app) =>
-                  app.object < 0 ? (
-                    <span key={app.label} className={styles.app} data-store-app>
-                      <span className={`${styles.appTile} ${styles.storeTile}`} data-store-icon>
-                        <StoreGlyph />
-                      </span>
-                      <span className={styles.appLabel}>{app.label}</span>
-                    </span>
-                  ) : (
-                    <span key={app.label} className={styles.app} data-app-object={app.object}>
-                      <span className={styles.appTile} data-app-tile>
-                        <ObjectArt index={app.object} />
-                      </span>
-                      <span className={styles.appLabel}>{app.label}</span>
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
-
+          <PhoneScreen time={layout.time}>
             {/* The Store */}
             <div className={styles.store} data-store>
               <p className={styles.storeTitle}>Search</p>
@@ -415,17 +368,7 @@ export function Intro() {
                 </span>
               </div>
             </div>
-
-            {/* The app's splash screen */}
-            <div className={styles.splash} data-splash>
-              <span className={styles.splashLogo} data-splash-logo>
-                <AppIcon className={styles.splashIcon} />
-              </span>
-              <span className={styles.splashName} data-splash-name>
-                {person.name}
-              </span>
-            </div>
-          </div>
+          </PhoneScreen>
         </div>
 
         {layout.objects.map((_, index) => (

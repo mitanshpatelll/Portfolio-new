@@ -25,7 +25,7 @@ export function Reveal({ children, className }: { children: ReactNode; className
   }, []);
 
   return (
-    <div ref={element} className={className ? `${styles.reveal} ${className}` : styles.reveal} data-shown={shown || undefined}>
+    <div ref={element} className={className ? `${styles.reveal} ${className}` : styles.reveal} data-reveal data-shown={shown || undefined}>
       {children}
     </div>
   );

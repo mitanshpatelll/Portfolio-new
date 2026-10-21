@@ -224,9 +224,9 @@ a { color: inherit; }
 }
 
 /* =========================================================
-   Intro (home page, once per session). While it plays, a cover hides the
-   portfolio until the intro takes over, and the portfolio's own entrance
-   waits so it plays after the reveal instead of underneath it.
+   Intro (home page, first visit). While it plays, a cover hides the
+   portfolio until the intro takes over. Later visits get the relaunch,
+   which starts from the page itself, so it needs no cover.
    ========================================================= */
 html[data-intro="playing"] body::after {
   content: "";

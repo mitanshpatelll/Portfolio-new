@@ -15,7 +15,7 @@ const nav = [
 /** The bordered column every page sits in, with the header and footer. */
 export function Shell({ children, onHome }: { children: ReactNode; onHome: boolean }) {
   return (
-    <div className={styles.column}>
+    <div className={styles.column} data-app-root>
       <header className={styles.header}>
         <nav className={styles.nav} aria-label="Main">
           {!onHome && (

@@ -56,7 +56,17 @@ export function Profile() {
         {person.bio}
       </p>
 
-      <p className={`${styles.status} mono fade`} style={order(4)}>
+      {/* At a glance: the numbers a recruiter looks for first. */}
+      <dl className={`${styles.glance} fade`} style={order(4)}>
+        {person.glance.map((item) => (
+          <div key={item.label}>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <p className={`${styles.status} mono fade`} style={order(5)}>
         <span className={styles.dot} aria-hidden="true" />
         {`${person.status} · ${person.location}`}
       </p>

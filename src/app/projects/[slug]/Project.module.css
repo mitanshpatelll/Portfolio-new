@@ -87,6 +87,71 @@
   box-shadow: 0 0 0 1px var(--line);
 }
 
+/* Try it on your phone */
+.tryIt {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  max-width: 520px;
+  margin: 22px 0 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+.qr {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--text);
+}
+.qr svg {
+  width: 84%;
+  height: 84%;
+  opacity: 0.55;
+  filter: blur(2.2px);
+}
+.qrBadge {
+  position: absolute;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.tryTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 600;
+}
+.tryText {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.tryLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+.tryLink svg { width: 14px; height: 14px; }
+
 .block {
   margin: 14px 20px 0;
   padding: 24px 22px 26px;
@@ -195,6 +260,73 @@
   color: var(--muted);
 }
 
+/* How a bill syncs: five steps left to right, arrows between (top to bottom on phones) */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.flow li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.flow li + li::before {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  left: -18px;
+  color: var(--faint);
+  transform: translateY(-50%);
+}
+.flowStep {
+  color: var(--faint);
+  font-size: 10.5px;
+}
+.flowTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+.flowText {
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+/* Decisions and trade-offs */
+.decisions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.decisions article {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.cost {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.cost span {
+  flex: none;
+  margin-top: 2px;
+  color: var(--faint);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .numbers {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -246,6 +378,19 @@
   .header { padding: 24px 16px 32px; }
   .block { margin: 12px 12px 0; padding: 22px 18px 24px; }
   .features { grid-template-columns: minmax(0, 1fr); }
+  .flow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .flow li + li::before {
+    content: "↓";
+    top: -19px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .decisions { grid-template-columns: minmax(0, 1fr); }
+  .tryIt { align-items: flex-start; }
+  .qr { width: 76px; height: 76px; }
   .icon { width: 60px; height: 60px; border-radius: 14px; }
   .name { font-size: 24px; }
 }

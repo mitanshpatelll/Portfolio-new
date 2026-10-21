@@ -1,21 +1,41 @@
 import Image from 'next/image';
 import { Icon } from '@/components/ui/Icon';
 import { BrandIcon, TagList } from '@/components/ui/Tag';
-import type { App } from '@/content/profile';
+import type { AppCard } from '@/content/profile';
 import styles from './Home.module.css';
 
-export function AppEntry({ app }: { app: App }) {
-  const caseStudy = `/projects/${app.slug}/`;
+export function AppEntry({ app }: { app: AppCard }) {
+  const caseStudy = app.caseStudy ? `/projects/${app.slug}/` : null;
+  // The icon and name lead to the case study, or else to the first store listing.
+  const home = caseStudy ?? app.stores?.[0]?.href;
+  const external = !caseStudy && !!home;
 
   return (
     <article className={`card ${styles.app}`}>
       <div className={styles.appHead}>
-        <a href={caseStudy} className={styles.appIconLink} tabIndex={-1} aria-hidden="true">
+        {home ? (
+          <a
+            href={home}
+            className={styles.appIconLink}
+            tabIndex={-1}
+            aria-hidden="true"
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noreferrer' : undefined}
+          >
+            <Image className={styles.appIcon} src={app.icon} alt="" width={44} height={44} />
+          </a>
+        ) : (
           <Image className={styles.appIcon} src={app.icon} alt="" width={44} height={44} />
-        </a>
+        )}
         <div className={styles.appTitle}>
           <h3 className={styles.appName}>
-            <a href={caseStudy}>{app.name}</a>
+            {home ? (
+              <a href={home} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
+                {app.name}
+              </a>
+            ) : (
+              app.name
+            )}
             <span className={`${styles.badge} mono`}>{app.status}</span>
           </h3>
           <p className={styles.platforms}>
@@ -28,14 +48,24 @@ export function AppEntry({ app }: { app: App }) {
           </p>
         </div>
         <div className={styles.appLinks}>
-          <a href={caseStudy}>
-            <Icon name="file" />
-            Case study
-          </a>
-          <a href={app.source} target="_blank" rel="noreferrer">
-            <BrandIcon brand="github" />
-            GitHub
-          </a>
+          {caseStudy && (
+            <a href={caseStudy}>
+              <Icon name="file" />
+              Case study
+            </a>
+          )}
+          {app.source && (
+            <a href={app.source} target="_blank" rel="noreferrer">
+              <BrandIcon brand="github" />
+              GitHub
+            </a>
+          )}
+          {app.stores?.map((store) => (
+            <a key={store.store} href={store.href} target="_blank" rel="noreferrer">
+              <BrandIcon brand={store.store === 'App Store' ? 'apple' : 'android'} />
+              {store.store}
+            </a>
+          ))}
         </div>
       </div>
 

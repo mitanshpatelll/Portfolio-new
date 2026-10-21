@@ -62,6 +62,7 @@ function structuredData() {
         familyName: 'Patel',
         alternateName: ['Mitansh', links.githubUser, links.leetcodeUser],
         jobTitle: person.role,
+        worksFor: { '@type': 'Organization', name: 'GlitchOver', url: 'https://www.glitchover.com' },
         description: person.bio,
         url: `${site.url}/`,
         image: `${site.url}${person.photo ?? site.image.url}`,

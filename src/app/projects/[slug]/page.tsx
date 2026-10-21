@@ -37,6 +37,42 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const order = (i: number) => ({ '--i': i }) as CSSProperties;
 
+/**
+ * A made-up QR-like pattern (not a real code), shown blurred while there is no build to link to.
+ * Three corner squares and a fixed scatter of cells, so it looks the same on every render.
+ */
+function PlaceholderQr() {
+  const size = 25;
+  let seed = 7;
+  const next = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const inCorner = (x: number, y: number) => (x < 8 && y < 8) || (x >= size - 8 && y < 8) || (x < 8 && y >= size - 8);
+  const cells: [number, number][] = [];
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      if (!inCorner(x, y) && next() > 0.52) cells.push([x, y]);
+    }
+  }
+  const corners = [
+    [0, 0],
+    [size - 7, 0],
+    [0, size - 7],
+  ];
+  return (
+    <svg viewBox={`-1 -1 ${size + 2} ${size + 2}`} shapeRendering="crispEdges">
+      {corners.map(([x = 0, y = 0]) => (
+        <g key={`${x}-${y}`}>
+          <rect x={x} y={y} width={7} height={7} fill="currentColor" />
+          <rect x={x + 1} y={y + 1} width={5} height={5} fill="var(--surface)" />
+          <rect x={x + 2} y={y + 2} width={3} height={3} fill="currentColor" />
+        </g>
+      ))}
+      {cells.map(([x, y]) => (
+        <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill="currentColor" />
+      ))}
+    </svg>
+  );
+}
+
 function Block({ id, title, children }: { id?: string; title: string; children: ReactNode }) {
   return (
     <section id={id} className={styles.block}>
@@ -115,8 +151,30 @@ export default async function ProjectPage({ params }: Props) {
         <div className="fade" style={order(5)}>
           <TagList tags={app.stack} />
         </div>
+
+        {/* Try it on your phone: a QR code once there is a test build; until then, a note. */}
+        <div className={`${styles.tryIt} fade`} style={order(6)}>
+          <div className={styles.qr} aria-hidden="true">
+            <PlaceholderQr />
+            {!app.tryIt.url && <span className={`${styles.qrBadge} mono`}>Soon</span>}
+          </div>
+          <div>
+            <p className={styles.tryTitle}>
+              Try it on your phone
+              {!app.tryIt.url && <span className={`${styles.badge} mono`}>In development</span>}
+            </p>
+            <p className={styles.tryText}>{app.tryIt.note}</p>
+            {app.tryIt.url && (
+              <a className={styles.tryLink} href={app.tryIt.url}>
+                Get the test build
+                <Icon name="arrowRight" />
+              </a>
+            )}
+          </div>
+        </div>
+
         {app.screenshots.length > 0 && (
-          <ul className={`${styles.shots} fade`} style={order(6)} aria-label={`${app.name} screenshots`}>
+          <ul className={`${styles.shots} fade`} style={order(7)} aria-label={`${app.name} screenshots`}>
             {app.screenshots.map((shot) => (
               <li key={shot.src}>
                 <Image className={styles.shot} src={shot.src} alt={shot.alt} width={360} height={780} />
@@ -168,12 +226,38 @@ export default async function ProjectPage({ params }: Props) {
       <Block id="engineers" title="For engineers">
         <p className={styles.text}>{engineering.intro}</p>
 
+        <h3 className={`${styles.subTitle} mono`}>How a bill syncs</h3>
+        <ol className={styles.flow}>
+          {engineering.flow.map((step, index) => (
+            <li key={step.title}>
+              <span className={`${styles.flowStep} mono`}>{String(index + 1).padStart(2, '0')}</span>
+              <span className={styles.flowTitle}>{step.title}</span>
+              <span className={styles.flowText}>{step.text}</span>
+            </li>
+          ))}
+        </ol>
+        <p className={styles.footnote}>{engineering.flowNote}</p>
+
         <h3 className={`${styles.subTitle} mono`}>The hard parts</h3>
         <div className={styles.notes}>
           {engineering.hardParts.map((part) => (
             <article key={part.title}>
               <h4 className={styles.noteTitle}>{part.title}</h4>
               <p className={styles.noteText}>{part.text}</p>
+            </article>
+          ))}
+        </div>
+
+        <h3 className={`${styles.subTitle} mono`}>Decisions and trade-offs</h3>
+        <div className={styles.decisions}>
+          {engineering.decisions.map((decision) => (
+            <article key={decision.choice}>
+              <h4 className={styles.noteTitle}>{decision.choice}</h4>
+              <p className={styles.noteText}>{decision.why}</p>
+              <p className={styles.cost}>
+                <span className="mono">Cost</span>
+                {decision.cost}
+              </p>
             </article>
           ))}
         </div>

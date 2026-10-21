@@ -44,7 +44,13 @@ export const person = {
   initial: 'M',
   role: 'React Native Developer',
   location: 'India',
-  bio: "I build mobile apps with React Native that stay fast and keep working when the internet doesn't. Right now I'm building Billify, a billing app for kirana stores.",
+  bio: "I'm the main developer of the GlitchOver app for Android and iOS, where gamers book live sessions with streamers and play in tournaments. On the side I'm building Billify, an offline-first billing app for kirana stores.",
+  // The at-a-glance numbers under the bio: what recruiters look for first.
+  glance: [
+    { value: '1+ yr', label: 'React Native in production' },
+    { value: '2', label: 'apps for Android and iOS' },
+    { value: 'Live', label: 'on the App Store and Google Play' },
+  ],
   status: 'Open to React Native roles',
   // Square photo in public/ (800×800). Set to null to fall back to the initial.
   photo: '/mitansh-patel.jpg' as string | null,
@@ -72,13 +78,14 @@ export const links = {
 /** About, in your own voice. **double stars** make a phrase bold. */
 export const about = [
   "I'm a **React Native developer** who cares about the parts of an app people only notice when they break: **working without internet**, lists that scroll smoothly, and updates that don't break what already works.",
-  "Right now I'm building **Billify** on my own, from the phone app to the server and the database.",
+  "At **GlitchOver** I build the mobile app gamers use to book live sessions with streamers and play in tournaments. On the side I'm building **Billify** on my own, from the phone app to the server and the database.",
   'Outside that, I write about **JavaScript internals** and practise problems on **LeetCode**.',
 ];
 
 export type Tag = { label: string; brand?: Brand };
 
-export type App = {
+/** An app as the Apps list on the home page shows it. */
+export type AppCard = {
   slug: string;
   name: string;
   icon: string;
@@ -87,9 +94,20 @@ export type App = {
   oneLiner: string;
   facts: string[];
   stack: Tag[];
-  source: string;
   // TODO: add 3–4 clean phone screenshots (e.g. public/apps/billify/1.png) as { src, alt }.
   screenshots: { src: string; alt: string }[];
+  /** Public code, if any. */
+  source?: string;
+  stores?: { store: 'App Store' | 'Google Play'; href: string }[];
+  /** Has its own page at /projects/<slug>/. */
+  caseStudy?: boolean;
+};
+
+/** An app with a case study page. */
+export type App = AppCard & {
+  source: string;
+  /** "Try it on your phone": a link for the QR code once there is a test build, else a note. */
+  tryIt: { url: string | null; note: string };
   metaTitle: string;
   description: string;
   summary: string;
@@ -102,6 +120,10 @@ export type App = {
     hardParts: { title: string; text: string }[];
     numbers: { label: string; value: string }[];
     numbersNote: string;
+    /** How a bill gets from the phone to the server, step by step. */
+    flow: { title: string; text: string }[];
+    flowNote: string;
+    decisions: { choice: string; why: string; cost: string }[];
     stack: { label: string; value: string }[];
     notes: { title: string; text: string }[];
   };
@@ -130,6 +152,7 @@ export const apps: App[] = [
     ],
     source: 'https://github.com/mitanshpatelll/billify-app',
     screenshots: [],
+    tryIt: { url: null, note: 'A test build for Android comes with the first release to real shops. Scan the code then to try Billify on your phone.' },
     metaTitle: 'Billify: offline billing app for kirana stores',
     description:
       'Billify lets small grocery shops in India bill in seconds by scanning barcodes, even offline, and send customers a digital bill. Built by Mitansh with React Native and Expo.',
@@ -175,6 +198,36 @@ export const apps: App[] = [
         { label: 'Sync pull, 500 rows', value: '~10 ms' },
       ],
       numbersNote: 'Median sync timings: 3 runs of 30 pushes and 180 pulls against a local Postgres on an M-series Mac, 15 Oct 2026.',
+      flow: [
+        { title: 'Phone', text: 'The bill is saved to SQLite, the source of truth on the phone.' },
+        { title: 'Outbox', text: 'The same transaction adds the change to an outbox table.' },
+        { title: 'Sync engine', text: 'When online, it pushes the outbox and pulls what changed.' },
+        { title: 'API', text: 'Fastify records each change once, by its id, so a retry never bills twice.' },
+        { title: 'Postgres', text: 'The shared copy, for the customer side and other devices.' },
+      ],
+      flowNote: 'Offline, billing never waits: changes queue in the outbox until a connection comes back.',
+      decisions: [
+        {
+          choice: 'My own API, not Firebase or Supabase straight from the app',
+          why: 'Sync and business rules live in one place I control, and the API is the only door to the data.',
+          cost: 'More to build, host and keep running.',
+        },
+        {
+          choice: 'Full offline for the shop, online only for customers',
+          why: 'Billing at the counter can never wait for a weak signal. Customers read bills from many shops, which live on the server anyway.',
+          cost: 'A sync engine to build and test, instead of plain API calls.',
+        },
+        {
+          choice: 'A typed API contract (OpenAPI), not a shared code package',
+          why: 'The app generates typed calls from the API spec, so the two repos deploy on their own.',
+          cost: 'The client has to be regenerated when the API changes.',
+        },
+        {
+          choice: 'My own database hook, not Drizzle\'s live query',
+          why: 'The first render already has the data, so screens never flash a loading state.',
+          cost: 'A small piece of my own code to maintain.',
+        },
+      ],
       stack: [
         { label: 'App', value: 'React Native, Expo, TypeScript' },
         { label: 'Navigation', value: 'Expo Router' },
@@ -196,6 +249,36 @@ export const apps: App[] = [
     },
   },
 ];
+
+/** Apps built at work. They have no case study page, but link to the stores. */
+export const work: AppCard[] = [
+  {
+    slug: 'glitchover',
+    name: 'GlitchOver',
+    icon: '/apps/glitchover/icon.png',
+    status: 'Live',
+    platforms: ['android', 'ios'],
+    oneLiner: 'The app I build at GlitchOver: gamers book live sessions with streamers, wait in a live queue, and play in community tournaments.',
+    facts: ['Main mobile developer', '5 tournament formats', 'Versions 2.0 to 3.0'],
+    stack: [
+      { label: 'React Native', brand: 'react' },
+      { label: 'Expo', brand: 'expo' },
+      { label: 'JavaScript', brand: 'javascript' },
+      { label: 'Redux Toolkit', brand: 'redux' },
+      { label: 'Socket.IO' },
+      { label: 'Reanimated' },
+      { label: 'Firebase' },
+    ],
+    screenshots: [],
+    stores: [
+      { store: 'App Store', href: 'https://apps.apple.com/in/app/glitchover/id6748820711' },
+      { store: 'Google Play', href: 'https://play.google.com/store/apps/details?id=com.glitchover.diasimosapp' },
+    ],
+  },
+];
+
+/** Everything the Apps section lists: work first, then my own apps with case studies. */
+export const showcase: AppCard[] = [...work, ...apps.map((app) => ({ ...app, caseStudy: true }))];
 
 export const experience = [
   {
@@ -246,9 +329,9 @@ export const skills: { group: string; items: Tag[] }[] = [
       { label: 'React Native', brand: 'react' },
       { label: 'Expo', brand: 'expo' },
       { label: 'Expo Router', brand: 'expo' },
-      { label: 'Android', brand: 'android' },
-      { label: 'iOS', brand: 'apple' },
-      { label: 'Unistyles' },
+      { label: 'Reanimated' },
+      { label: 'Push notifications' },
+      { label: 'Over-the-air updates' },
       { label: 'Offline sync' },
     ],
   },
@@ -257,91 +340,36 @@ export const skills: { group: string; items: Tag[] }[] = [
     items: [
       { label: 'TypeScript', brand: 'typescript' },
       { label: 'JavaScript', brand: 'javascript' },
-      { label: 'Python', brand: 'python' },
-      { label: 'C++', brand: 'cplusplus' },
-      { label: 'C', brand: 'c' },
     ],
   },
   {
-    group: 'Frontend',
+    group: 'State & data',
     items: [
-      { label: 'React.js', brand: 'react' },
-      { label: 'Next.js', brand: 'nextjs' },
       { label: 'Redux Toolkit', brand: 'redux' },
-      { label: 'RTK Query', brand: 'redux' },
-      { label: 'TanStack Query', brand: 'tanstack' },
       { label: 'Zustand' },
-      { label: 'Vite', brand: 'vite' },
-      { label: 'PWA', brand: 'pwa' },
+      { label: 'TanStack Query', brand: 'tanstack' },
+      { label: 'Socket.IO' },
     ],
   },
   {
     group: 'Backend',
     items: [
       { label: 'Node.js', brand: 'node' },
-      { label: 'Express.js', brand: 'express' },
       { label: 'Fastify', brand: 'fastify' },
-      { label: 'REST APIs' },
-      { label: 'WebSockets' },
-      { label: 'JWT', brand: 'jwt' },
-      { label: 'Passport.js', brand: 'passport' },
-      { label: 'OAuth 2.0' },
-      { label: 'Better Auth', brand: 'betterauth' },
-      { label: 'OpenAPI', brand: 'openapi' },
-    ],
-  },
-  {
-    group: 'AI / ML',
-    items: [
-      { label: 'LLM API Integration (Gemini, Cerebras, Groq)', brand: 'gemini' },
-      { label: 'RAG Pipelines' },
-      { label: 'Vector Search (MongoDB Atlas $vectorSearch)', brand: 'mongodb' },
-      { label: 'LLM Fallback / Resilience Architecture' },
-      { label: 'Prompt Engineering' },
-    ],
-  },
-  {
-    group: 'Databases',
-    items: [
       { label: 'PostgreSQL', brand: 'postgres' },
-      { label: 'SQLite', brand: 'sqlite' },
-      { label: 'Drizzle', brand: 'drizzle' },
-      { label: 'MongoDB', brand: 'mongodb' },
-      { label: 'MySQL', brand: 'mysql' },
-      { label: 'SQL Server' },
-      { label: 'Indexing & Aggregation' },
-      { label: 'Query Optimization' },
+      { label: 'SQLite + Drizzle', brand: 'sqlite' },
+      { label: 'Firebase' },
     ],
   },
   {
-    group: 'Architecture',
-    items: [
-      { label: 'Microservices' },
-      { label: 'Event-Driven Systems' },
-      { label: 'MVC' },
-      { label: 'Factory Pattern' },
-      { label: 'Concurrency' },
-      { label: 'ACID Transactions' },
-      { label: 'Rate Limiting' },
-      { label: 'Idempotent APIs' },
-    ],
-  },
-  {
-    group: 'Testing',
+    group: 'Testing & tools',
     items: [
       { label: 'Jest', brand: 'jest' },
-      { label: 'Maestro' },
       { label: 'Vitest', brand: 'vitest' },
-    ],
-  },
-  {
-    group: 'DevOps & Tools',
-    items: [
+      { label: 'Maestro' },
       { label: 'Git', brand: 'git' },
-      { label: 'Bitbucket CI/CD', brand: 'bitbucket' },
       { label: 'Xcode', brand: 'xcode' },
       { label: 'Android Studio', brand: 'androidstudio' },
-      { label: 'Agile / Scrum' },
     ],
   },
 ];

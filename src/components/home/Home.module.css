@@ -145,6 +145,35 @@
   text-wrap: pretty; /* no single word left alone on the last line */
 }
 
+/* At a glance: three numbers in a row, the value above its label */
+.glance {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 560px;
+  margin: 18px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.glance > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 1px;
+  padding: 10px 14px;
+}
+.glance > div + div { border-left: 1px solid var(--line); }
+.glance dd {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.glance dt {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .status {
   display: inline-flex;
   align-items: center;
@@ -755,6 +784,9 @@
     margin-top: 16px;
     font-size: 15px;
   }
+  .glance > div { padding: 9px 10px; }
+  .glance dd { font-size: 16px; }
+  .glance dt { font-size: 11px; }
   .appHead { flex-wrap: wrap; }
   .appLinks {
     width: 100%;

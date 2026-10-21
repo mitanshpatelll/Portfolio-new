@@ -2,7 +2,7 @@ import { CopyEmail } from '@/components/site/CopyEmail';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { BrandIcon, TagList } from '@/components/ui/Tag';
 import type { Brand } from '@/components/ui/brands';
-import { about, apps, experience, links, skills, writing } from '@/content/profile';
+import { about, experience, links, showcase, skills, writing } from '@/content/profile';
 import { getContributions, getLeetCodeStats } from '@/lib/activity';
 import { Reveal } from '@/components/ui/Reveal';
 import { ActivityView } from './ActivityView';
@@ -16,7 +16,7 @@ export function Apps() {
   return (
     <Section id="apps" title="Apps" note="One codebase, two platforms: React Native for Android and iOS.">
       <div className={styles.apps}>
-        {apps.map((app) => (
+        {showcase.map((app) => (
           <AppEntry key={app.slug} app={app} />
         ))}
       </div>

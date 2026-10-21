@@ -6,7 +6,7 @@ import { Shell } from '@/components/site/Shell';
 import { Icon } from '@/components/ui/Icon';
 import { Reveal } from '@/components/ui/Reveal';
 import { BrandIcon, TagList } from '@/components/ui/Tag';
-import { apps } from '@/content/profile';
+import { apps, person, site } from '@/content/profile';
 import styles from './Project.module.css';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: app.metaTitle,
     description: app.description,
     alternates: { canonical: url },
-    openGraph: { type: 'article', title: app.metaTitle, description: app.description, url },
-    twitter: { card: 'summary', title: app.metaTitle, description: app.description },
+    openGraph: { type: 'article', title: app.metaTitle, description: app.description, url, images: [site.image] },
+    twitter: { card: 'summary_large_image', title: app.metaTitle, description: app.description, images: [site.image] },
   };
 }
 
@@ -55,6 +55,34 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <Shell onHome={false}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'SoftwareApplication',
+                name: app.name,
+                description: app.description,
+                applicationCategory: 'BusinessApplication',
+                operatingSystem: 'Android, iOS',
+                url: `${site.url}/projects/${app.slug}/`,
+                image: `${site.url}${app.icon}`,
+                sameAs: app.source,
+                author: { '@type': 'Person', '@id': `${site.url}/#person`, name: person.name, url: `${site.url}/` },
+              },
+              {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                  { '@type': 'ListItem', position: 1, name: person.name, item: `${site.url}/` },
+                  { '@type': 'ListItem', position: 2, name: app.name, item: `${site.url}/projects/${app.slug}/` },
+                ],
+              },
+            ],
+          }),
+        }}
+      />
       <header className={styles.header}>
         <a className={`${styles.back} fade`} style={order(0)} href="/#apps">
           <Icon name="back" />

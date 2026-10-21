@@ -14,7 +14,35 @@ const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', display: 
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  authors: [{ name: person.name }],
+  title: { default: site.title, template: `%s · ${person.name}` },
+  description: site.description,
+  keywords: site.keywords,
+  applicationName: `${person.name} Portfolio`,
+  authors: [{ name: person.name, url: site.url }],
+  creator: person.name,
+  publisher: person.name,
+  formatDetection: { telephone: false },
+  openGraph: {
+    type: 'website',
+    siteName: `${person.name} Portfolio`,
+    locale: 'en_IN',
+    url: '/',
+    title: site.title,
+    description: site.description,
+    images: [site.image],
+  },
+  twitter: { card: 'summary_large_image', title: site.title, description: site.description, images: [site.image] },
+  // Setting icons here replaces the icon.svg file convention, so list it explicitly.
+  icons: { icon: [{ url: '/icon.svg', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png' },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+  },
+  // Paste the code from Google Search Console into NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION.
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export const viewport: Viewport = {
@@ -30,9 +58,10 @@ export const viewport: Viewport = {
 // - opens in dark unless the visitor chose light (saved choice), so the page never flashes the wrong theme;
 // - applies a saved animation speed from developer mode;
 // - decides whether this view gets the intro: every load of the home page, except deep links
-//   (#section), reduced motion, or animations switched off (?intro forces it). Failsafes uncover the
+//   (#section), reduced motion, animations switched off, and search bots / link previewers /
+//   Lighthouse, which get the same page without the animation (?intro forces it). Failsafes uncover the
 //   page if the intro never appears within 8 s, and in any case after 40 s.
-const boot = `(function(){var d=document.documentElement;d.classList.add('js');var scale=1;try{var t=localStorage.getItem('theme');d.dataset.theme=(t==='light'||t==='dark')?t:'dark';var s=JSON.parse(localStorage.getItem('developer-options'));if(s&&s.unlocked&&typeof s.scale==='number'){scale=s.scale;d.style.setProperty('--anim',String(scale))}}catch(e){}try{var force=/[?&]intro(=|&|$)/.test(location.search);var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;if(location.pathname==='/'&&(force||(!location.hash&&!reduce&&scale!==0))){d.dataset.intro='playing';setTimeout(function(){if(d.dataset.intro==='playing'&&!document.querySelector('[data-intro-overlay]'))delete d.dataset.intro},8000);setTimeout(function(){delete d.dataset.intro},40000*Math.max(1,scale||1))}}catch(e){}})()`;
+const boot = `(function(){var d=document.documentElement;d.classList.add('js');var scale=1;try{var t=localStorage.getItem('theme');d.dataset.theme=(t==='light'||t==='dark')?t:'dark';var s=JSON.parse(localStorage.getItem('developer-options'));if(s&&s.unlocked&&typeof s.scale==='number'){scale=s.scale;d.style.setProperty('--anim',String(scale))}}catch(e){}try{var force=/[?&]intro(=|&|$)/.test(location.search);var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;var bot=/bot|crawler|spider|slurp|lighthouse|pagespeed|facebookexternalhit|embedly|preview/i.test(navigator.userAgent);if(location.pathname==='/'&&(force||(!location.hash&&!reduce&&!bot&&scale!==0))){d.dataset.intro='playing';setTimeout(function(){if(d.dataset.intro==='playing'&&!document.querySelector('[data-intro-overlay]'))delete d.dataset.intro},8000);setTimeout(function(){delete d.dataset.intro},40000*Math.max(1,scale||1))}}catch(e){}})()`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

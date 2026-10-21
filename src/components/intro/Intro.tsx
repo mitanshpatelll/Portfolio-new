@@ -81,7 +81,8 @@ export function Intro() {
   const finish = useCallback(() => {
     if (finished.current) return;
     finished.current = true;
-    delete document.documentElement.dataset.intro;
+    // 'done' (rather than removing it) keeps the hero from fading in a second time.
+    document.documentElement.dataset.intro = 'done';
     const url = new URL(window.location.href);
     if (url.searchParams.has('intro')) {
       url.searchParams.delete('intro');

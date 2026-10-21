@@ -64,7 +64,7 @@ export function Profile() {
                   aria-label={social.label}
                   title={social.label}
                   target={social.href.startsWith('http') ? '_blank' : undefined}
-                  rel="noreferrer"
+                  rel="me noreferrer"
                 >
                   {social.brand ? <BrandIcon brand={social.brand} size={16} /> : social.icon && <Icon name={social.icon} />}
                 </a>

@@ -236,3 +236,6 @@ html[data-intro="playing"] body::after {
   background: var(--page);
 }
 html[data-intro="playing"] #main * { animation-play-state: paused !important; }
+/* When the intro plays, the hero is already in place underneath it (the intro's own zoom is its
+   entrance), so it is painted at load. That keeps the page's main content fast for search engines. */
+html[data-intro] .fade { animation: none !important; }

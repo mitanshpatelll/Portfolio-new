@@ -175,6 +175,9 @@
   animation-delay: calc(800ms * var(--anim));
 }
 
+:global(html[data-intro]) .notification,
+:global(html[data-intro]) .avatarBadge { animation: none; }
+
 @keyframes notify {
   from { opacity: 0; filter: blur(4px); transform: translateY(-16px) scale(0.97); }
   to { opacity: 1; filter: none; transform: none; }

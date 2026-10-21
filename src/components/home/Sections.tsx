@@ -123,7 +123,7 @@ export function Contact() {
       <ul className={`card ${styles.contactRows}`}>
         {rows.map((row) => (
           <li key={row.name} className={styles.contactRow}>
-            <a href={row.href} target={row.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+            <a href={row.href} target={row.href.startsWith('http') ? '_blank' : undefined} rel="me noreferrer">
               <span className={styles.contactIcon}>
                 {row.brand ? <BrandIcon brand={row.brand} size={16} /> : row.icon && <Icon name={row.icon} />}
               </span>

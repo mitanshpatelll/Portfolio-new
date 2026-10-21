@@ -7,9 +7,36 @@ import type { Brand } from '@/components/ui/brands';
  * are what make a portfolio feel like a person made it.
  */
 
+/**
+ * The live address, used for canonical links, the sitemap and share previews. Set
+ * NEXT_PUBLIC_SITE_URL to your own domain; on Vercel the production domain is used automatically.
+ */
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000');
+
 export const site = {
-  url: 'https://mitansh-blogs.vercel.app',
+  url: siteUrl.replace(/\/$/, ''),
   version: '2026.10.19',
+  // Share preview served by src/app/og.png/route.tsx.
+  image: { url: '/og.png', width: 1200, height: 630, alt: 'Mitansh Patel, React Native Developer' },
+  /** What search results show: name first, then what people search for. */
+  title: 'Mitansh Patel — React Native Developer Portfolio',
+  description:
+    'Mitansh Patel, React Native developer in India. Fast, offline-first Android and iOS apps built with Expo and TypeScript: apps, experience, skills and writing.',
+  keywords: [
+    'Mitansh Patel',
+    'Mitansh',
+    'React Native developer',
+    'React Native developer portfolio',
+    'React Native developer India',
+    'mobile app developer',
+    'Expo',
+    'TypeScript',
+    'Android',
+    'iOS',
+    'Billify',
+  ],
 };
 
 export const person = {
@@ -107,7 +134,7 @@ export const apps: App[] = [
     ],
     source: 'https://github.com/mitanshpatelll/billify-app',
     screenshots: [],
-    metaTitle: `Billify · ${person.name}`,
+    metaTitle: 'Billify: offline billing app for kirana stores',
     description:
       'Billify lets small grocery shops in India bill in seconds by scanning barcodes, even offline, and send customers a digital bill. Built by Mitansh with React Native and Expo.',
     summary:

@@ -6,8 +6,8 @@ import { ThemeToggle } from './ThemeToggle';
 import styles from './Site.module.css';
 
 const nav = [
-  { href: '#apps', label: 'Apps' },
   { href: '#experience', label: 'Experience' },
+  { href: '#apps', label: 'Apps' },
   { href: '#writing', label: 'Writing' },
   { href: '#contact', label: 'Contact' },
 ];

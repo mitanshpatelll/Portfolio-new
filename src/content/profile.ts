@@ -116,7 +116,8 @@ export const apps: App[] = [
   {
     slug: 'billify',
     name: 'Billify',
-    icon: '/apps/billify/icon.png',
+    // Neutral version of the app icon (graphite and off-white) so it sits with the site's palette.
+    icon: '/apps/billify/icon-neutral.png',
     status: 'In development',
     platforms: ['android', 'ios'],
     oneLiner: 'Billing for small grocery shops: scan items, make a bill in seconds and send it on WhatsApp, even offline.',

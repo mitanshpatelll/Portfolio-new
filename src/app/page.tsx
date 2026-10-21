@@ -85,8 +85,8 @@ export default function Home() {
       <IntroLoader />
       <Shell onHome>
         <Profile />
-        <Apps />
         <Experience />
+        <Apps />
         <About />
         <Skills />
         <Writing />

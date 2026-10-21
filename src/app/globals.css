@@ -225,18 +225,21 @@ a { color: inherit; }
 }
 
 /* =========================================================
-   Intro (home page, first visit). While it plays, a cover hides the
-   portfolio until the intro takes over. Later visits get the relaunch,
-   which starts from the page itself, so it needs no cover.
+   Intro (home page). The full intro (first visit) and the phone opening
+   the app (later visits) start from a blank screen, so a cover hides the
+   portfolio until they take over. The relaunch on a refresh starts from
+   the page itself, so it needs no cover.
    ========================================================= */
-html[data-intro="playing"] body::after {
+html[data-intro="playing"] body::after,
+html[data-intro="open"] body::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 9998;
   background: var(--page);
 }
-html[data-intro="playing"] #main * { animation-play-state: paused !important; }
+html[data-intro="playing"] #main *,
+html[data-intro="open"] #main * { animation-play-state: paused !important; }
 /* When the intro plays, the hero is already in place underneath it (the intro's own zoom is its
    entrance), so it is painted at load. That keeps the page's main content fast for search engines. */
 html[data-intro] .fade { animation: none !important; }

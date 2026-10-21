@@ -8,8 +8,8 @@ const Relaunch = dynamic(() => import('./Relaunch').then((module) => module.Rela
 
 /**
  * Downloads only the animation this page view plays (the boot script in layout.tsx decides): the
- * full intro on a first visit, the short close-and-reopen afterwards, nothing for search engines,
- * deep links or reduced motion.
+ * full intro on a first visit, the close-and-reopen on a refresh, the phone opening the app on a
+ * later visit, nothing for search engines, deep links or reduced motion.
  */
 export function IntroLoader() {
   const [mode, setMode] = useState<string>();
@@ -19,6 +19,6 @@ export function IntroLoader() {
   }, []);
 
   if (mode === 'playing') return <Intro />;
-  if (mode === 'relaunch') return <Relaunch />;
+  if (mode === 'relaunch' || mode === 'open') return <Relaunch />;
   return null;
 }

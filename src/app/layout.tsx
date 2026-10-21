@@ -60,13 +60,16 @@ export const viewport: Viewport = {
 // - marks JS as available (entrance animations are JS-only, so content stays visible without it);
 // - opens in dark unless the visitor chose light (saved choice), so the page never flashes the wrong theme;
 // - applies a saved animation speed from developer mode;
-// - decides which opening this view gets on the home page: the full intro on the first visit
-//   ("playing"), then a short close-and-reopen of the app on every later load ("relaunch", which
-//   also starts the page at the top). None for deep links (#section), reduced motion, animations
-//   switched off, and search bots / link previewers / Lighthouse, which get the same page without
-//   the animation. ?intro forces the full intro. Failsafes end it if it never appears within 8 s,
-//   and in any case after 40 s; they set "done" (not remove it) so the hero never fades in twice.
-const boot = `(function(){var d=document.documentElement;d.classList.add('js');var scale=1;try{var t=localStorage.getItem('theme');d.dataset.theme=(t==='light'||t==='dark')?t:'dark';var s=JSON.parse(localStorage.getItem('developer-options'));if(s&&s.unlocked&&typeof s.scale==='number'){scale=s.scale;d.style.setProperty('--anim',String(scale))}}catch(e){}try{var force=/[?&]intro(=|&|$)/.test(location.search);var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;var bot=/bot|crawler|spider|slurp|lighthouse|pagespeed|facebookexternalhit|embedly|preview/i.test(navigator.userAgent);if(location.pathname==='/'&&(force||(!location.hash&&!reduce&&!bot&&scale!==0))){var seen=false;try{seen=localStorage.getItem('intro-seen')==='1'}catch(e){}var mode=(seen&&!force)?'relaunch':'playing';d.dataset.intro=mode;if(mode==='relaunch'&&'scrollRestoration' in history)history.scrollRestoration='manual';var end=function(){var m=d.dataset.intro;if(m==='playing'||m==='relaunch')d.dataset.intro='done'};setTimeout(function(){if(!document.querySelector('[data-intro-overlay]'))end()},8000);setTimeout(end,40000*Math.max(1,scale||1))}}catch(e){}})()`;
+// - decides which opening this view gets on the home page:
+//   - the first visit: the full intro ("playing");
+//   - a refresh after that: the app closes and opens again ("relaunch", starting at the top);
+//   - coming back later: just the phone opening the app ("open");
+//   - none when arriving from another page of this site, going back or forward, for deep links
+//     (#section), reduced motion, animations switched off, and search bots / link previewers /
+//     Lighthouse, which get the same page without the animation.
+//   ?intro forces the full intro. Failsafes end it if it never appears within 8 s, and in any
+//   case after 40 s; they set "done" (not remove it) so the hero never fades in twice.
+const boot = `(function(){var d=document.documentElement;d.classList.add('js');var scale=1;try{var t=localStorage.getItem('theme');d.dataset.theme=(t==='light'||t==='dark')?t:'dark';var s=JSON.parse(localStorage.getItem('developer-options'));if(s&&s.unlocked&&typeof s.scale==='number'){scale=s.scale;d.style.setProperty('--anim',String(scale))}}catch(e){}try{var force=/[?&]intro(=|&|$)/.test(location.search);var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;var bot=/bot|crawler|spider|slurp|lighthouse|pagespeed|facebookexternalhit|embedly|preview/i.test(navigator.userAgent);if(location.pathname==='/'&&(force||(!location.hash&&!reduce&&!bot&&scale!==0))){var seen=false;try{seen=localStorage.getItem('intro-seen')==='1'}catch(e){}var nav=(performance.getEntriesByType&&performance.getEntriesByType('navigation')[0])||{};var type=nav.type||(performance.navigation&&performance.navigation.type===1?'reload':'navigate');var internal=false;try{internal=!!document.referrer&&new URL(document.referrer).origin===location.origin}catch(e){}var mode=(force||!seen)?'playing':type==='reload'?'relaunch':(type==='navigate'&&!internal)?'open':'';if(mode){d.dataset.intro=mode;if(mode==='relaunch'&&'scrollRestoration' in history)history.scrollRestoration='manual';var end=function(){var m=d.dataset.intro;if(m==='playing'||m==='relaunch'||m==='open')d.dataset.intro='done'};setTimeout(function(){if(!document.querySelector('[data-intro-overlay]'))end()},8000);setTimeout(end,40000*Math.max(1,scale||1))}}}catch(e){}})()`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

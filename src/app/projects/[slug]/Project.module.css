@@ -1,0 +1,251 @@
+.header { padding: 28px 24px 36px; }
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.back:hover { color: var(--text); }
+.back svg { width: 15px; height: 15px; }
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.icon {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  border-radius: 17px;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.platforms span,
+.platforms a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.platforms a:hover { color: var(--text); }
+.summary {
+  max-width: 62ch;
+  margin: 22px 0 16px;
+  font-size: 16px;
+}
+.shots {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 0 0 6px;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+}
+.shots li {
+  flex: none;
+  scroll-snap-align: start;
+}
+.shot {
+  width: 180px;
+  height: auto;
+  border-radius: 24px;
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.block {
+  margin: 14px 20px 0;
+  padding: 24px 22px 26px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.blockTitle {
+  margin: 0 0 14px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.text {
+  max-width: 64ch;
+  margin: 0;
+  color: var(--muted);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.features li {
+  display: flex;
+  gap: 12px;
+}
+.featureIcon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px var(--line);
+  color: var(--accent);
+}
+.featureIcon svg { width: 16px; height: 16px; }
+.featureTitle {
+  display: block;
+  font-weight: 600;
+}
+.featureText {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.checklist li {
+  display: flex;
+  gap: 10px;
+}
+.checklist svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  margin-top: 3px;
+  color: var(--accent);
+}
+.next {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0 0;
+}
+.next span {
+  flex: none;
+  margin-top: 2px;
+  color: var(--faint);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.subTitle {
+  margin: 28px 0 12px;
+  color: var(--faint);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.noteTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.noteText {
+  max-width: 64ch;
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.numbers > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  padding: 14px 16px;
+  box-shadow: -1px -1px 0 0 var(--line);
+}
+.numbers dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+.numbers dd {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+}
+.footnote {
+  margin: 10px 0 0;
+  color: var(--faint);
+  font-size: 12px;
+}
+
+.stack {
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+.stack > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.stack dt { font-weight: 500; }
+.stack dd {
+  margin: 0;
+  color: var(--muted);
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  .header { padding: 24px 16px 32px; }
+  .block { margin: 12px 12px 0; padding: 22px 18px 24px; }
+  .features { grid-template-columns: minmax(0, 1fr); }
+  .icon { width: 60px; height: 60px; border-radius: 14px; }
+  .name { font-size: 24px; }
+}

@@ -1,0 +1,492 @@
+.overlay {
+  /* Phone body colours: near-black on light pages, graphite on dark ones so it stands out. */
+  --device-body: #111111;
+  --device-edge: #2b2b2a;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background: var(--page);
+  color: var(--text);
+}
+:global(:root[data-theme="dark"]) .overlay {
+  --device-body: #2a2b30;
+  --device-edge: #45464d;
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme])) .overlay {
+    --device-body: #2a2b30;
+    --device-edge: #45464d;
+  }
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+}
+
+.caption {
+  position: absolute;
+  top: 4vh;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0 24px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+  opacity: 0;
+}
+
+/* =========================================================
+   The rectangle that becomes a phone
+   ========================================================= */
+.device {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--w);
+  height: var(--h);
+  margin: calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
+  opacity: 0;
+}
+
+.outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.outline rect {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.body {
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--w) * 0.16);
+  background: var(--device-body);
+  box-shadow:
+    0 0 0 1.5px var(--device-edge),
+    0 40px 80px -36px rgb(0 0 0 / 0.55);
+  opacity: 0;
+}
+
+.screen {
+  position: absolute;
+  inset: 9px;
+  overflow: hidden;
+  border-radius: calc(var(--w) * 0.13);
+  background: var(--surface);
+  opacity: 0;
+}
+
+.status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  padding: 2px 18px 0;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.camera {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #050505;
+  transform: translateX(-50%);
+}
+.statusIcons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* =========================================================
+   Home screen: the objects, now apps
+   ========================================================= */
+.home {
+  position: absolute;
+  inset: 32px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 10px 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px 0;
+}
+.dock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 8px 0 6px;
+  border-radius: calc(var(--w) * 0.1);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+.dock .appLabel { display: none; }
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+}
+/* Monochrome app icons; only the Store stands out, because that is what gets tapped. */
+.appTile {
+  display: grid;
+  place-items: center;
+  width: calc(var(--w) * 0.165);
+  height: calc(var(--w) * 0.165);
+  border-radius: 22.5%;
+  background: color-mix(in srgb, var(--text) 10%, transparent);
+  color: var(--text);
+}
+.appTile svg {
+  width: 58%;
+  height: 58%;
+}
+.storeTile {
+  background: var(--text);
+  color: var(--bg);
+}
+.appLabel {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 9px;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   The Store
+   ========================================================= */
+.store {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 44px 14px 0;
+  background: var(--surface);
+  clip-path: inset(50% 50% 50% 50%);
+  opacity: 0;
+}
+.storeTitle {
+  margin: 0 2px 10px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--hover);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+.query {
+  overflow: hidden;
+  color: var(--text);
+  white-space: nowrap;
+}
+.caret {
+  width: 1.5px;
+  height: 16px;
+  margin-left: -6px;
+  background: var(--accent);
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  opacity: 0;
+}
+.resultIconWrap {
+  display: block;
+  width: 48px;
+  height: 48px;
+  flex: none;
+}
+.resultIcon,
+.splashIcon {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 22.5%;
+  object-fit: cover;
+}
+.monogram {
+  background: var(--text);
+  color: var(--bg);
+  font-size: 22px;
+  font-weight: 700;
+}
+.resultText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.resultName,
+.resultRole {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.resultName {
+  font-size: 14px;
+  font-weight: 700;
+}
+.resultRole {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+/* Get → download ring → Open, stacked in one spot */
+.getArea {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 28px;
+  flex: none;
+}
+.get,
+.open,
+.progress {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.get,
+.open {
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.open { opacity: 0; }
+.progress { opacity: 0; }
+.progress svg {
+  width: 26px;
+  height: 26px;
+  transform: rotate(-90deg);
+}
+.ringTrack {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2.5;
+}
+.ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.ringStop { fill: var(--accent); }
+
+/* =========================================================
+   The app's splash screen
+   ========================================================= */
+.splash {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--page);
+  clip-path: inset(50% 50% 50% 50%);
+  opacity: 0;
+}
+.splashLogo {
+  display: block;
+  width: calc(var(--w) * 0.3);
+  height: calc(var(--w) * 0.3);
+  opacity: 0;
+}
+.splashIcon.monogram {
+  background: var(--text);
+  color: var(--bg);
+  font-size: calc(var(--w) * 0.15);
+}
+.splashName {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0;
+}
+
+/* =========================================================
+   Things a phone replaced
+   ========================================================= */
+.object {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 10px 24px -14px rgb(0 0 0 / 0.35);
+  color: var(--text);
+  opacity: 0;
+}
+.object svg {
+  width: 30px;
+  height: 30px;
+}
+.objectFloat {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  animation: bob calc(3200ms * var(--anim)) ease-in-out infinite;
+  animation-delay: var(--bob-delay, 0s);
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.objectLabel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: -40px;
+  right: -40px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+/* =========================================================
+   The cursor (a pointing hand)
+   ========================================================= */
+.hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: 64px;
+  opacity: 0;
+  transform-origin: 34% 3%;
+  filter: drop-shadow(0 8px 14px rgb(0 0 0 / 0.25));
+}
+.hand svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.handFill {
+  fill: #ffffff;
+  stroke: #1a1a19;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.handLine {
+  fill: none;
+  stroke: #1a1a19;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* =========================================================
+   Skip
+   ========================================================= */
+.skip {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 3;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.12s ease;
+}
+.skip:hover { color: var(--text); }
+.skip:active { transform: scale(0.95); }
+
+@media (max-width: 640px) {
+  .caption { font-size: 12px; }
+  .objectLabel { font-size: 9px; }
+  .skip {
+    right: 50%;
+    bottom: 20px;
+    transform: translateX(50%);
+  }
+  .skip:active { transform: translateX(50%) scale(0.95); }
+  .object {
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+  }
+  .object svg {
+    width: 22px;
+    height: 22px;
+  }
+  .store { padding: 44px 10px 0; }
+  .result { gap: 8px; }
+  .resultIconWrap {
+    width: 40px;
+    height: 40px;
+  }
+  .resultName { font-size: 12px; }
+  .resultRole { font-size: 10.5px; }
+  .getArea { width: 46px; }
+  .hand { width: 54px; }
+}

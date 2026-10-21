@@ -1,0 +1,12 @@
+.reveal {
+  transition:
+    opacity calc(700ms * var(--anim)) var(--ease-out),
+    filter calc(700ms * var(--anim)) var(--ease-out),
+    transform calc(700ms * var(--anim)) var(--ease-out);
+}
+
+:global(.js) .reveal:not([data-shown]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(12px);
+}

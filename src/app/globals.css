@@ -1,0 +1,238 @@
+/* =========================================================
+   Tokens: minimal and clean. Neutral surfaces and rounded cards, dark by
+   default (set by the boot script). One muted warm accent, used sparingly:
+   status dot, download ring, Get/Open, caret and the activity graph.
+   ========================================================= */
+:root {
+  --page: #f7f6f3;
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --text: #1b1a18;
+  --muted: #6b6862;
+  --faint: #a19e97;
+  --line: #e7e4de;
+  --hover: #f1efea;
+
+  --accent: #b9775a;
+  --accent-soft: #f3e7e0;
+  --accent-text: #8f5235;
+  --on-accent: #ffffff;
+
+  --level-0: #ebe8e2;
+  --level-1: #e5d3c7;
+  --level-2: #d2ab95;
+  --level-3: #b9775a;
+  --level-4: #8f5235;
+
+  /* Developer-mode sheet and toast */
+  --surface-high: #f1efea;
+  --sub: var(--muted);
+  --outline: #a19e97;
+  --primary: var(--text);
+  --on-primary: var(--bg);
+  --primary-soft: var(--hover);
+  --on-primary-soft: var(--text);
+  --scrim: rgb(0 0 0 / 0.35);
+  --toast: #1b1a18;
+  --on-toast: #f3f1ec;
+  --stone-bg: var(--hover);
+  --stone-fg: var(--text);
+  --olive-bg: var(--hover);
+  --olive-fg: var(--text);
+  --clay-bg: var(--hover);
+  --clay-fg: var(--text);
+  --accent-tile-bg: var(--hover);
+  --accent-tile-fg: var(--text);
+
+  --radius: 22px;
+  --anim: 1;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  color-scheme: light;
+}
+
+/* Dark (the default: the boot script sets data-theme="dark" unless the visitor chose light).
+   Without JS, the device setting decides. */
+:root[data-theme="dark"] {
+  --page: #0e0f11;
+  --bg: #0e0f11;
+  --surface: #16171a;
+  --text: #f1f0ec;
+  --muted: #a3a19b;
+  --faint: #6b6a66;
+  --line: #24252a;
+  --hover: #1e1f23;
+
+  --accent: #e2b49b;
+  --accent-soft: #2a221d;
+  --accent-text: #e2b49b;
+  --on-accent: #1f140e;
+
+  --level-0: #1e1f23;
+  --level-1: #3a2f28;
+  --level-2: #5e4a3c;
+  --level-3: #9c7b63;
+  --level-4: #e2b49b;
+
+  --surface-high: #1e1f23;
+  --outline: #6b6a66;
+  --scrim: rgb(0 0 0 / 0.6);
+  --toast: #f1f0ec;
+  --on-toast: #0e0f11;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --page: #0e0f11;
+    --bg: #0e0f11;
+    --surface: #16171a;
+    --text: #f1f0ec;
+    --muted: #a3a19b;
+    --faint: #6b6a66;
+    --line: #24252a;
+    --hover: #1e1f23;
+    --accent: #e2b49b;
+    --accent-soft: #2a221d;
+    --accent-text: #e2b49b;
+    --on-accent: #1f140e;
+    --level-0: #1e1f23;
+    --level-1: #3a2f28;
+    --level-2: #5e4a3c;
+    --level-3: #9c7b63;
+    --level-4: #e2b49b;
+    --surface-high: #1e1f23;
+    --outline: #6b6a66;
+    --scrim: rgb(0 0 0 / 0.6);
+    --toast: #f1f0ec;
+    --on-toast: #0e0f11;
+    color-scheme: dark;
+  }
+}
+
+/* A rounded card: the one surface every section uses. */
+.card {
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+  --tag-bg: var(--hover);
+  --tag-fg: var(--muted);
+  --tag-border: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --anim: 0; }
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-padding-top: 72px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+::selection { background: var(--accent-soft); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus { top: 12px; }
+
+.mono { font-family: var(--font-mono), ui-monospace, monospace; }
+
+/* Developer mode → Show layout bounds */
+[data-bounds] * {
+  outline: 1px solid rgb(214 51 132 / 0.6);
+  outline-offset: -1px;
+}
+
+/* Small round icon tiles, used in the developer-mode sheet */
+.tile {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--tile-bg, var(--stone-bg));
+  color: var(--tile-fg, var(--stone-fg));
+}
+.tile svg { width: 18px; height: 18px; }
+.tile.tone-accent { --tile-bg: var(--accent-tile-bg); --tile-fg: var(--accent-tile-fg); }
+.tile.tone-olive { --tile-bg: var(--olive-bg); --tile-fg: var(--olive-fg); }
+.tile.tone-clay { --tile-bg: var(--clay-bg); --tile-fg: var(--clay-fg); }
+.tile.tone-stone { --tile-bg: var(--stone-bg); --tile-fg: var(--stone-fg); }
+
+/* First-screen entrance: a soft blur-and-rise, one item after another. JS-only. */
+.js .fade {
+  animation: fade-in calc(800ms * var(--anim)) var(--ease-out) both;
+  animation-delay: calc((var(--i, 0) * 90ms + 60ms) * var(--anim));
+}
+
+@keyframes fade-in {
+  from { opacity: 0; filter: blur(6px); transform: translateY(10px); }
+  to { opacity: 1; filter: none; transform: none; }
+}
+
+/* =========================================================
+   Intro (home page, once per session). While it plays, a cover hides the
+   portfolio until the intro takes over, and the portfolio's own entrance
+   waits so it plays after the reveal instead of underneath it.
+   ========================================================= */
+html[data-intro="playing"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: var(--page);
+}
+html[data-intro="playing"] #main * { animation-play-state: paused !important; }

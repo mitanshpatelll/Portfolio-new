@@ -41,7 +41,9 @@ export function Profile() {
             </span>
             {links.email && (
               <>
-                <span aria-hidden="true">·</span>
+                <span className={styles.sep} aria-hidden="true">
+                  ·
+                </span>
                 <a href={`mailto:${links.email}`}>{links.email}</a>
                 <CopyEmail email={links.email} />
               </>

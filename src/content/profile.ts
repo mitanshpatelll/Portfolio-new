@@ -58,9 +58,10 @@ export const intro = {
 };
 
 export const links = {
-  // TODO: fill these in. Each one shows up wherever contact options appear.
-  email: null as string | null,
-  linkedin: null as string | null,
+  // Each one shows up wherever contact options appear.
+  email: 'mitanshpatel99@gmail.com' as string | null,
+  linkedin: 'https://www.linkedin.com/in/mitanshpatel/' as string | null,
+  // TODO: the updated resume PDF, in public/ (e.g. '/mitansh-patel-resume.pdf').
   resume: null as string | null,
   github: 'https://github.com/mitanshpatelll',
   githubUser: 'mitanshpatelll',
@@ -198,19 +199,31 @@ export const apps: App[] = [
 
 export const experience = [
   {
-    // TODO: your company, its logo in public/ (or null for initials), start month and year,
-    // and two or three things you did there, each with a number if you have one.
-    company: '[Company]',
+    // From the GlitchOver app's git history (Mitansh, mitansh@glitchover.com): 266 commits,
+    // Jul 2025 to Oct 2026, about 80% of the app's commits in that time.
+    // TODO: confirm the title, employment type and start date against LinkedIn.
+    company: 'GlitchOver',
     logo: null as string | null,
     role: 'React Native Developer',
     type: 'Full-time',
-    period: '[Mon YYYY] – Present',
+    period: 'Jul 2025 – Present',
     current: true,
-    summary: '[One or two sentences: what the product is and what you own.]',
-    points: ['[Something you built or improved, with a number if you have one.]'],
+    summary:
+      "GlitchOver is a gaming platform where fans book live sessions with streamers and play in community tournaments. I'm the main developer on its Android and iOS app, with about 80% of the app's commits since July 2025.",
+    points: [
+      'Built the tournament system end to end: sign-ups and invite-only events, brackets in five formats (single and double elimination, round robin, Swiss, battle royale), a match scheduler, and live chat during matches.',
+      'Built live-session booking: slot booking and requests, a real-time queue with checkout, payments and invoices, kept in sync for every viewer over WebSockets.',
+      'Added sign-in with Apple and Google, OTP verification, push notifications and over-the-air updates, and shipped versions 2.0 through 3.0.',
+      'Kept the app current and fast: upgraded Expo SDK 52 → 57 and React Native to 0.86, and added skeleton loaders, image caching, lazy-loaded screens and crash fixes.',
+    ],
     tech: [
       { label: 'React Native', brand: 'react' },
-      { label: 'TypeScript', brand: 'typescript' },
+      { label: 'Expo', brand: 'expo' },
+      { label: 'JavaScript', brand: 'javascript' },
+      { label: 'Redux Toolkit', brand: 'redux' },
+      { label: 'Socket.IO' },
+      { label: 'Reanimated' },
+      { label: 'Firebase' },
     ] as Tag[],
   },
 ];
